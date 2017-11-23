@@ -1,0 +1,782 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>首页</title>
+<style>
+* { font-family:"微软雅黑",Arial; }
+#topmenu  { position:absolute; top:91px; left:69px; width:1200px; display:none; }
+#topmenu div { margin:0px -24px; display:block; float:left; width:207px; height:84px; line-height:84px; font-family:"微软雅黑",Arial; font-size:28px; color:#ffffff; text-align:center; border:0px solid #ff3300; background:no-repeat center; }
+#topinfo { position:absolute; top:50px; left:690px; width: 525px; height: 55px; }
+#topinfo td{ font-size:26px; color:#ffffff; }
+.submenu { background:url(images/video_hide.png) no-repeat 640px 168px; }
+.submenu div { background: no-repeat; border:0px solid #ff6600 }
+</style>
+<script src="js/sbory.js"></script>
+<script src="js/speed.js"></script>
+<script>
+/**************全局变量声明**********************/
+var oHistory		= new $.plugs.history(),
+    userName    =   $.mem.getVar("userName",userName),
+	//userName		= $.url.query('userName') || '',
+	HOTEL_AUTH_INFO	= $.mem.getVar('HISU_SMART_HOTEL_ROOM_INFO'),
+	operatorMark	= 'hunan',
+	menuBox			= null,
+	focusArea       = 0,
+	tempfocusArea   = 1; //($.url.query('focusArea') || 0)-0,
+	lastFocusArea   =($.url.query('lastFocusArea') || 0)-0,
+
+	area            =($.url.query('area') || 0)-0,
+    msPos           =($.url.query('msPos') || 0)-0,
+    mfPos           =($.url.query('mfPos') || 0)-0,
+	sfPos           = ($.url.query('sfPos') || 0)-0;
+
+var videoList 	= [{"id":33,"savePath":"","createTime":{"nanos":0,"time":1502965095000,"minutes":18,"seconds":15,"hours":18,"month":7,"timezoneOffset":-480,"year":117,"day":4,"date":17},"status":1,"name":"常德一医新闻视频","videoLength":9999,"playNum":0,"indexStatus":0,"type":0,"hotelId":65,"url":"http://cdui.hunancatv.com:8809/index_movie/cdyy/1dd33ef2d2f441a58a37094f2aa7ca20.mp4"}],
+	videoIndex	=	0,
+	playFlag	= false;
+
+var menuData = [
+  {
+    "name": "首页推荐",
+    "subList": [],
+    "focusImg": "",
+    "blurImg": "",
+    "url": ""
+  }/*,
+  {
+    "name": "测试",
+    "subList": [
+		{ "name":"", "focusImg":"images/tm.png", "blurImg":"images/ad12.png", "url":"" }
+    ],
+    "focusImg": "",
+    "blurImg": "",
+    "url": ""
+  }*/
+];
+
+
+function initCurrMenuData(){
+
+	var tempValue = typeof System=="object"&&typeof System.getSysInfo!="undefined" ? System.getSysInfo("fc.config.path"):"";
+	if(tempValue!=""){
+		menuData[0].subList = [
+			{ "name":"直播频道", "focusImg":"images/tm.png", "blurImg":"images/icon00.png", "url":"cmd:android:%5B%7B%22package%22%3A%22com.dvb.live%22%2C%22download%22%3A%22%22%2C%22activity%22%3A%22%22%7D%5D:hunan" },
+			{ "name":"电视回看", "focusImg":"images/tm.png", "blurImg":"images/icon01.png", "url":"cmd:android:%5B%7B%22package%22%3A%22com.tt.replay%22%2C%22download%22%3A%22http%3A%2F%2Fcdui.hunancatv.com%3A8809%2FapkDownload%2Fhunan_tstv_app.apk%22%2C%22activity%22%3A%22%22%7D%5D:hunan" },
+			{ "name":"视频框", "focusImg":"images/tm.png", "blurImg":"images/tm.png", "url":"", "zoom":"no" },
+			{ "name":"视频点播", "focusImg":"images/tm.png", "blurImg":"images/icon02.png", "url":"cmd:android:%5B%7B%22package%22%3A%22com.hunantv.operator%22%2C%22download%22%3A%22http%3A%2F%2Fcdui.hunancatv.com%3A8809%2FapkDownload%2Fhunan_mgtv_app.apk%22%2C%22activity%22%3A%22%22%7D%5D:hunan" },
+			{ "name":"通知公告", "focusImg":"images/tm.png", "blurImg":"images/icon03.png", "url":"webpage/startup.html" },
+			{ "name":"应用管理", "focusImg":"images/tm.png", "blurImg":"images/icon04.png", "url":"cmd:android:%5B%7B%22package%22%3A%22com.jushi.dangbeimarket%22%2C%22download%22%3A%22http%3A%2F%2Fcdui.hunancatv.com%3A8809%2FapkDownload%2Fhunan_appman_app.apk%22%2C%22activity%22%3A%22%22%7D%5D:hunan" },
+			{ "name":"系统设置", "focusImg":"images/tm.png", "blurImg":"images/icon05.png", "url":"cmd:android:%5B%7B%22package%22%3A%22com.fc.setting%22%2C%22download%22%3A%22%22%2C%22activity%22%3A%22%22%7D%5D:hunan" }
+		]
+	}else{
+		menuData[0].subList = [
+			{ "name":"直播频道", "focusImg":"images/tm.png", "blurImg":"images/icon00.png", "url":"cmd:android:%5B%7B%22package%22%3A%22ActionBootMode%22%2C%22activity%22%3A%22com.suma.midware.action.dvb.play%22%2C%22arguments%22%3A%5B%7Bkey%3A'test'%2C%20value%3A''%20%7D%5D%2C%22download%22%3A%22%22%7D%5D:hunan" },
+			{ "name":"电视回看", "focusImg":"images/tm.png", "blurImg":"images/icon01.png", "url":"cmd:android:%5B%7B%22package%22%3A%22com.xormedia.hunantv%22%2C%22download%22%3A%22http%3A%2F%2Fcdui.hunancatv.com%3A8809%2FapkDownload%2Fhunan_tstv_app.apk%22%2C%22activity%22%3A%22%22%7D%5D:hunan" },
+			{ "name":"视频框", "focusImg":"images/tm.png", "blurImg":"images/tm.png", "url":"", "zoom":"no" },
+			{ "name":"视频点播", "focusImg":"images/tm.png", "blurImg":"images/icon02.png", "url":"cmd:android:%5B%7B%22package%22%3A%22com.hunantv.operator%22%2C%22download%22%3A%22http%3A%2F%2Fcdui.hunancatv.com%3A8809%2FapkDownload%2Fhunan_mgtv_app.apk%22%2C%22activity%22%3A%22%22%7D%5D:hunan" },
+			{ "name":"通知公告", "focusImg":"images/tm.png", "blurImg":"images/icon03.png", "url":"cmd:android:%5B%7B%22package%22%3A%22ActionBootMode%22%2C%22activity%22%3A%22sh.intent.action.AlbumActivity%22%2C%22arguments%22%3A%5B%7Bkey%3A'polyportal'%2C%20value%3A'http%3A%2F%2F172.16.130.4%3A8080%2Fpolymedicine'%20%7D%2C%7Bkey%3A'shtvurl'%2C%20value%3A'http%3A%2F%2F172.16.130.24'%20%7D%2C%7Bkey%3A'imgportal'%2C%20value%3A'http%3A%2F%2F172.16.130.24'%20%7D%2C%7Bkey%3A'icsportal'%2C%20value%3A'http%3A%2F%2F60.205.14.72%3A9595%2FICS'%20%7D%2C%7Bkey%3A'albumId'%2C%20value%3A'6367cc6cbed042a286fc3ff5b4c01ba9'%20%7D%2C%7Bkey%3A'albumName'%2C%20value%3A'%E9%A5%AE%E9%A3%9F%E5%85%BB%E7%94%9F%E6%B1%87'%20%7D%5D%2C%22download%22%3A%22http%3A%2F%2Fcdui.hunancatv.com%3A8809%2FapkDownload%2Fhunan_skyworth_health.apk%22%7D%5D:hunan" },
+			{ "name":"应用管理", "focusImg":"images/tm.png", "blurImg":"images/icon04.png", "url":"cmd:android:%5B%7B%22package%22%3A%22com.jushi.dangbeimarket%22%2C%22download%22%3A%22http%3A%2F%2Fcdui.hunancatv.com%3A8809%2FapkDownload%2Fhunan_appman_app.apk%22%2C%22activity%22%3A%22%22%7D%5D:hunan" },
+			{ "name":"系统设置", "focusImg":"images/tm.png", "blurImg":"images/icon05.png", "url":"cmd:android:%5B%7B%22package%22%3A%22ActionBootMode%22%2C%22activity%22%3A%22com.suma.midware.action.settings%22%2C%22arguments%22%3A%5B%7Bkey%3A'test'%2C%20value%3A''%20%7D%5D%2C%22download%22%3A%22%22%7D%5D:hunan" }
+		]
+		
+	}
+}
+
+/****************按键处理**********************/
+function keyEvent(key,keyObj){
+	var p2 = keyObj.p2;
+	switch(key) {
+			case "LEFT":
+				keyLeftRight(-1);
+				break;
+			case "RIGHT":
+				keyLeftRight(1);
+				break;
+			case "UP":
+				keyUpDown(-1);
+				break;
+			case "DOWN":
+				keyUpDown(1);
+				break;
+			case "CHANNEL_UP":
+			case "PAGE_UP":
+				alert("PAGE_UP portal");
+				location.href = "webpage/startup.html";
+				changePage(-1);
+				break;
+			case "CHANNEL_DOWN":
+			case "PAGE_DOWN":
+				changePage(1);
+				break;
+			case "OK":
+				doOk();
+				break;
+			case "MENU":
+			case "HOMEPAGE":
+				alert("open portal");
+				location.href = "http://cdui.hunancatv.com:8809/smart_hotel/webpage/startup.html";
+				return 0;
+				break;
+			case "BACK":			
+			case "EXIT":
+				if(focusArea==2){
+					changeFocusArea(1);
+				}
+				return 0;
+				break;
+			case "NUMBER_0":
+			case "NUMBER_1":
+			case "NUMBER_2":
+			case "NUMBER_3":
+			case "NUMBER_4":
+			case "NUMBER_5":
+			case "NUMBER_6":
+			case "NUMBER_7":
+			case "NUMBER_8":
+			case "NUMBER_9":
+				groupPassKey(keyObj.code-48);
+				break;
+			case 'VOLUME_UP':
+				_volumeUp();
+				break;
+			case 'VOLUME_DOWN':
+				_volumeDown();
+				break;
+			case 'MUTE':	
+				_keyMute();
+				break;
+			case "F2":
+				location.href = location.href;
+				break;
+			case "VOD_PREPAREPLAY_SUCCESS":	
+				if(p2==0 || p2 == 2){
+					$.media.play();
+					break;
+				}else if(p2 == 3){
+					showTip('不支持的编码格式');
+				}else if(p2 == 1){
+					showTip('视频不支持');
+				}
+				videoIndex++;
+				playVideo();
+		      	break;
+			case "VOD_PLAY_SUCCESS"://5205
+				if(p2 == 2){
+					showTip('音频不支持');
+				}else{
+					showTip('');
+				}
+				break;
+			case "VOD_PLAY_FAILED"://5206
+				//showTip('开始播放错误');
+				videoIndex++;
+				playVideo();
+				break;			
+			case 'BROWSER_PAUSE':
+				exitvod();
+				break;
+			case "VOD_PROGRAM_END"://5210
+				playFlag = false;
+				videoIndex++;
+			case 'BROWSER_RESUME':
+				if(menuBox.dataPos==0){	
+					playVideo();
+				}
+				break;
+			default:
+				/*if(key.indexOf('NUMBER')>-1){
+					var tmpKey = key.split('_')[1];
+					break;
+				}*/
+				return 1;
+		}	
+		return 0;
+}
+
+/** *添加音量键处理** */
+	if($.browser=="iPanel"){
+		//var volume = new iPanel.eventFrame.volume();
+		var volume = iPanel.eventFrame.volume; //兼容湖南有线UI
+		
+		var muteStatus = volume.getMuteStatus();
+		window._keyMute=function(){	 				
+			muteStatus = volume.actionMute();				
+		}
+		window._volumeUp=function(){
+			UpOrDown(3);
+		}
+		window._volumeDown=function(){
+			UpOrDown(-3);
+		}
+	
+		function  UpOrDown(offset) {
+			if (volume.muteStatus == 1 && offset > 0) {
+				volume.actionMute();
+			}
+			var vol = volume.currVolume;
+			if (offset > 0) {
+				volume.up(offset);
+			} else {
+				volume.down(offset);
+			}
+			volume.currVolume = volume.getCurrVolume();
+		}
+	}
+
+
+var ajaxGetNum = 0;
+
+
+var getLoginAjax = null;
+var getOutTimer = -1;
+var showPageFlag = false;
+var checkServerFlag = false;
+
+/**************入口**********************/
+function init(){
+	initCurrMenuData();
+	
+	var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection; 
+	//alert("navigator.onLine = "+navigator.onLine);
+	//alert("connection = "+ typeof connection);
+	if(connection){
+		alert("navigator.connection.type = "+ connection.type);
+	}
+	
+	var tempFlag = $.mem.getVar("First_Bootup_End");
+	//var tempFlag = $.mem.setVar("First_Bootup","");
+	
+	//alert("First_Bootup_End = "+tempFlag);
+	if(tempFlag==true){
+		initPage();
+	}else{
+		checkServer();
+	}
+}
+
+function getLoginData(_call){
+	getLoginAjax = new XMLHttpRequest();
+	getLoginAjax.onreadystatechange = _call;
+	getLoginAjax.open("GET", "http://cdui.hunancatv.com/stblogin", true);
+	getLoginAjax.send(null);	
+}
+
+function initPage(){
+	if(showPageFlag) return;
+	showPageFlag = true;
+	$.mem.setVar("First_Bootup_End",true);
+	
+	//$("loadBox").style("opacity","hidden");
+	loadBox.style.opacity = 0;
+	$.plugs.keyProcess= keyEvent;
+	initMenuData();
+	initClock();
+	
+	setTimeout("checkServer();", 6000);
+}
+
+function checkServer(){
+	if(checkServerFlag) return;
+	checkServerFlag = true;
+
+	loadTxt.innerHTML = "系统正在启动...";
+	//alert("@@@ checkServer Start ");
+	getLoginData(function(){
+		//alert("@@@ getLoginAjax.readyState = "+getLoginAjax.readyState+" getLoginAjax.status = "+getLoginAjax.status);
+		if(getLoginAjax.readyState==4){
+			clearTimeout(getOutTimer);
+			if(getLoginAjax.status==200){
+				var tempData = eval("("+ getLoginAjax.responseText +")");
+				if(typeof tempData=="object"&&tempData.code==0){
+					alert("网络已连接，准备进入互动主页...");
+					setTimeout(function(){
+						if(tempData.data&&tempData.data.portalUrl){
+							location.href = tempData.data.portalUrl;
+						}else{
+							location.href = "http://cdui.hunancatv.com/smart_hotel/webpage/startup.html";
+						}	
+					}, 5000);
+					return;
+				}
+			}
+			initPage();
+			checkServerFlag = false;
+			setTimeout("checkServer();", 6000);
+		}
+	});
+	
+	getOutTimer = setTimeout(function(){
+		//alert("@@@ 请求超时...");
+		getLoginAjax.abort();
+		//setTimeout("checkServer();", 10000);
+	}, 30000);
+}
+
+function initClock(){	
+	$("dateTime").text($.date.format('yyyy-MM-dd HH:mm', new Date()));
+	setTimeout(initClock,60000);
+}
+
+function initMenuData(){
+	if(menuData.length<1)return;
+	menuBox=new $.plugs.list();
+	menuBox.haveData=function(iPos,dPos){
+		var data=menuData[dPos];
+		$("menu"+iPos).show();
+		$("menu"+iPos).text(data.name);
+	};
+	menuBox.noData=function(iPos,dPos){
+		$("menu"+iPos).hide();
+		$("menu"+iPos).text(" ");
+	};
+	menuBox.init({
+		showType:'t',
+		showLen:8,
+		dataLen:menuData.length,
+		startPos:msPos,
+		focusPos:mfPos
+	});
+		
+	initSubMenu();	
+	
+	setFocusStyle(1);
+	$.media.setPosition(449,147,767,447);
+	if(menuBox.dataPos==0){
+		window.setTimeout("playVideo();",1000);
+	}
+		
+	changeFocusArea(tempfocusArea); 	
+	sfPos = 0;
+}
+
+function changeMenu(__num){
+	setFocusStyle(0);	
+	menuBox.changeList(__num);
+	setFocusStyle(1);		
+	initSubMenu();
+	
+	if(menuBox.dataPos==0){
+		playVideo();
+	}else{
+		$.media.stop();
+	}
+}
+
+//////////////////////////子菜单列表代码Start////////////////////////////////
+
+var currSubData = [];
+var subShowFlag = {};
+var subDataPos = 0;
+var subColSize = 0;
+var subFocusPos = 0;
+var subFocusSize = 0;
+var subFocusData = [
+	[
+		[0,1,2],
+		[3,4,2],
+		[5,6,2]
+	],
+	[
+		[0,1,2,3],
+		[0,4,5,3],
+		[6,7,7,3]
+	]
+];
+
+
+//初始化子菜单数据及列表显示
+function initSubMenu(){
+	currSubData = subFocusData[menuBox.dataPos];
+	subColSize = currSubData[0].length;
+	subDataPos = sfPos!=0?currSubData[Math.floor(sfPos/subColSize)][sfPos%subColSize]:0;
+	subFocusPos = sfPos;
+	subFocusSize = currSubData.length*subColSize;
+
+	showSubList();
+	changeSubFocus();
+}
+
+//显示子菜单的图片
+function showSubList(){
+	if(new Boolean(subShowFlag["sub"+menuBox.dataPos])==true) return;
+	for(var i=0; i<currSubData.length; i++){
+		for(var j=0; j<currSubData[i].length; j++){
+			var tempNum = currSubData[i][j];
+			$("sec"+menuBox.dataPos+tempNum).bgImage(menuData[menuBox.dataPos].subList[tempNum].blurImg);
+			
+			//预加载焦点图片
+			//var tempImg = document.createElement("img");
+			//tempImg.src = menuData[menuBox.dataPos].subList[tempNum].focusImg;
+			//imgLoad.appendChild(tempImg);
+			//alert(menuData[menuBox.dataPos].subList[tempNum].name);
+		}
+	}
+	subShowFlag["sub"+menuBox.dataPos] = true;
+}
+
+//控制子菜单焦点移动
+function changeSubFocus(){
+	var tempDiv = $("sec"+menuBox.dataPos+subDataPos);
+		
+	document.getElementById("subFocus").style.webkitTransitionDuration="0ms";
+	document.getElementById("subFocus").style.webkitTransform="scale(1)";  
+	//alert(subFocusPos+"__"+subDataPos);
+	$("subFocus").bgImage(menuData[menuBox.dataPos].subList[subDataPos].blurImg);
+	$("subFocus").style("top", (tempDiv.top()-4)+"px");
+	$("subFocus").style("left", (tempDiv.left()-4)+"px");
+	$("subFocus").style("width", (tempDiv.width()-10)+"px");
+	$("subFocus").style("height", (tempDiv.height()-10)+"px");
+	
+	if(menuData[menuBox.dataPos].subList[subDataPos].zoom=="no") return; 
+	window.setTimeout(function(){
+		document.getElementById("subFocus").style.webkitTransitionDuration="100ms";
+		document.getElementById("subFocus").style.webkitTransform="scale(1.05)";
+	},50);	
+}
+
+function changeSubRow(__num){
+	if(__num<0&&subFocusPos<subColSize){
+		//changeFocusArea(0); 
+		return;
+	}
+	//if(__num<0&&subFocusPos==0||__num>0&&subFocusPos==subFocusSize-1) return;
+	if(__num>0&&Math.floor(subFocusPos/subColSize)==currSubData.length-1) return;
+	
+	subFocusPos = ((subFocusPos+__num*subColSize)%subFocusSize+subFocusSize)%subFocusSize;
+	var tempDataPos = currSubData[Math.floor(subFocusPos/subColSize)][subFocusPos%subColSize];
+	if(__num!=0&&tempDataPos==subDataPos){
+		changeSubRow(__num);
+	}else{
+		subDataPos = tempDataPos;
+		changeSubFocus();
+	}
+}
+
+function changeSubCol(__num){
+	//if(__num<0&&subFocusPos==0||__num>0&&subFocusPos==subFocusSize-1) return;
+	if((__num<0&&subFocusPos%subColSize==0)||(__num>0&&subFocusPos%subColSize==subColSize-1)){
+		return;
+		if(__num<0){
+			var __pos = ((menuBox.dataPos+__num)%menuBox.showLen+menuBox.showLen)%menuBox.showLen;
+			sfPos = subFocusData[__pos][0][subFocusData[__pos][0].length-1];
+		}
+		changeFocusArea(0);
+		changeMenu(__num);
+		changeFocusArea(1);
+		sfPos = 0;
+	}
+	
+	subFocusPos = ((subFocusPos+__num)%subFocusSize+subFocusSize)%subFocusSize;
+	var tempDataPos = currSubData[Math.floor(subFocusPos/subColSize)][subFocusPos%subColSize];
+	if(__num!=0&&tempDataPos==subDataPos){
+		changeSubCol(__num);
+	}else{
+		subDataPos = tempDataPos;
+		changeSubFocus();
+	}
+}
+
+//////////////////////////子菜单列表代码END////////////////////////////////
+
+//设置主菜单样式效果
+function setFocusStyle(__num){
+	if(__num>0){
+		$('menu'+menuBox.focusPos).color("#ffffff");
+		$('menu'+menuBox.focusPos).bgImage("images/menubtn.png");
+		$('menu'+menuBox.focusPos).style("fontSize","32px");
+		$("body_bg"+menuBox.dataPos).style("visibility","visible");
+	}else{
+		$('menu'+menuBox.focusPos).color("#585858");
+		$('menu'+menuBox.focusPos).bgImage('images/tm.gif');
+		$('menu'+menuBox.focusPos).style("fontSize","28px");
+		$("body_bg"+menuBox.dataPos).style("visibility","hidden");
+	}
+}
+//左右按键控制处理
+function keyLeftRight(__num){
+	if(focusArea==0){
+		changeMenu(__num);
+	}else if(focusArea==1){
+		changeSubCol(__num); 
+	}
+}
+//上下按键控制处理
+function keyUpDown(__num){
+	if(focusArea==0){
+		if(__num>0&&menuData[menuBox.dataPos].subList.length>0){
+			changeFocusArea(1); 
+		}
+	}else if(focusArea==1){
+		//if(__num>0&&Math.floor(subFocusPos/subColSize)==currSubData.length-1) return;
+		changeSubRow(__num);
+	}
+}
+//控制焦点所在区域，0表示主菜单，1表示子菜单
+function changeFocusArea(__num){
+	if(focusArea==0){
+		$('menu'+menuBox.focusPos).color("#ff9220");
+		$('menu'+menuBox.focusPos).bgImage('images/tm.gif');
+		
+	}else if(focusArea==1){
+		$("subFocus").hide();
+	}else if(focusArea==2){
+		hideFullScreen();
+	}else if(focusArea==3){
+		
+	}
+	lastFocusArea=focusArea;
+	focusArea=__num;
+	if(focusArea==0){
+		$('menu'+menuBox.focusPos).color("#ffffff");
+		$('menu'+menuBox.focusPos).bgImage("images/menubtn.png");
+		
+	}else if(focusArea==1){
+		$("subFocus").show();
+	}else if(focusArea==2){
+		showFullScreen();
+	}else if(focusArea==3){
+		
+	}
+}
+
+function doOk(){
+	if(focusArea==1){
+		var	tempMenu = menuData[menuBox.dataPos];
+		var tempUrl = tempMenu.subList[subDataPos].url;
+		if(menuBox.dataPos==0&&subDataPos==2){
+			changeFocusArea(2);
+		}else if(!$.empty(tempUrl)){
+			if(tempUrl.toLowerCase().indexOf('cmd:')>-1){
+				if(tempUrl.toLowerCase().indexOf("com.android.settings")>-1 && $.browser=='Android'){
+					oHistory.init();
+					var returnUrl = location.href.split('?')[0]+'?focusArea='+focusArea+'&mfPos='+menuBox.focusPos+'&msPos='+menuBox.startPos+"&sfPos="+subFocusPos+"&userName="+userName;
+					oHistory.add(returnUrl);
+					location.href = "pwd.htm?currUrl="+tempUrl;
+					
+				}else if(tempUrl.indexOf("ActionBootMode")>-1){
+					actionBootMode(tempUrl);
+				}else if(typeof urlCmdMap=='function'){
+					urlCmdMap(tempUrl);
+				}
+			}else{
+				oHistory.init();
+				var returnUrl = location.href.split('?')[0]+'?focusArea='+focusArea+'&mfPos='+menuBox.focusPos+'&msPos='+menuBox.startPos+"&sfPos="+subFocusPos+"&userName="+userName;
+				oHistory.add(returnUrl);
+				if(tempUrl.toLowerCase().indexOf('http://')>-1){
+					if(tempUrl.indexOf('?') > -1) tempUrl = tempUrl + '&returnUrl='+$.url.encode(returnUrl) + '&userName='+userName + '&hotelCode='+HOTEL_AUTH_INFO.hotelCode + '&roomCode='+HOTEL_AUTH_INFO.roomCode + '&roomName=' + HOTEL_AUTH_INFO.roomName;
+					else tempUrl = tempUrl + '?returnUrl='+$.url.encode(returnUrl) + '&userName='+userName + '&hotelCode='+HOTEL_AUTH_INFO.hotelCode + '&roomCode='+HOTEL_AUTH_INFO.roomCode + '&roomName=' + HOTEL_AUTH_INFO.roomName;
+				}
+				location.href = tempUrl;
+			}
+		}
+	  
+	}else if(focusArea==2){
+		changeFocusArea(1);
+	}
+}
+
+function actionBootMode(cmdStr){
+	var cmd = cmdStr.toLowerCase().split(":")[1];//执行的命令
+	var operator = cmdStr.substring(cmdStr.lastIndexOf(':')+1);//对应的运营商或应用场景标识
+	switch(cmd){
+		case 'android':
+			if(typeof System =='undefined' || typeof JSON == 'undefined'){
+				alert('非法环境！');
+				break;
+			}
+			var spos = cmdStr.indexOf('android:')+8,
+				epos = cmdStr.lastIndexOf(':');
+				cmdPramArr = null;
+			try{
+				cmdPramArr = eval($.url.decode(cmdStr.substring(spos,epos)));
+			}catch(e){
+				System.toast('命令参数错误，请检查！');
+				break;
+			}
+			if(cmdPramArr && cmdPramArr.length>0){
+				for(var i=0,len=cmdPramArr.length;i<len;i++){
+					var cp = cmdPramArr[i];
+					if(cp.uninstall && System.uninstallApp){
+						System.uninstallApp(cp.download);
+					}
+					var ret = System.openAppForAction(cp.activity||'',cp.arguments?JSON.stringify(cp.arguments):'');
+					if(ret==0)break;
+					if(ret<0 && cp.download){
+						System.downloadApk(cp.download);
+						break;
+					}
+				}
+			}
+			break;	
+		default:
+			break;
+	}
+}
+
+
+function showFullScreen(){
+	$.media.fullScreen();
+	$("mainBox").style("display","none");
+}
+
+function hideFullScreen(){
+	$.media.setPosition(449,147,767,447);
+	$("mainBox").style("display","block");
+}
+
+function playVideo(){
+	/*videoIndex = videoIndex%videoList.length
+	var video = videoList[videoIndex];
+	var video_url = $.browser == 'Android' && video.savePath? video.savePath : video.url;
+	
+	if(video_url.indexOf('rtsp://') > -1){
+		var macAddress = $.STB.getMAC();
+		macAddress = macAddress.replace(/-/g, "");
+		video_url += "&stbcapability=0x1&servicename=StartOver&ipanel_shangxi=1"+"&STBMac="+macAddress;
+               
+	}else if(video_url.indexOf('dvb://') > -1){//格式：dvb://ONId.TSId.serviceId
+			var dvbInfo = video_url.substr(6);
+			var dvbArray = dvbInfo.split(".");
+			if(dvbArray.length > 2) initTV(dvbArray[0], dvbArray[1], dvbArray[2]);
+			return;
+		}
+	 $.media.open(video_url);*/
+}
+
+function initTV(_onId, _tsId, _serviceId){
+		var AVPlayTimor=-1;
+		// 中央一台
+		if($.browser=="iPanel"){
+			AVPlayTimor = setTimeout("playAV("+_onId+", "+ _tsId+", "+_serviceId+")",150);
+		}
+		
+}
+
+function playAV(_onId, _tsId, _serviceId){
+	var ONId = _onId || 39321;// 固定值
+	var TSId = _tsId || 1102;
+	var serviceId = _serviceId || 8102;
+	var tempService = DVB.getService(ONId,TSId,serviceId);
+	if(new Boolean(tempService)==true){
+		DVB.playAV(tempService.frequency, tempService.serviceId);
+	}
+}
+
+function showTip(__msg){
+	__msg = __msg ||  '';
+	
+	var tmp = $('video_msg');
+	if(__msg == ''){
+		tmp.hide();
+		playFlag =true;	
+	}else{
+		tmp.show().text(__msg);
+		playFlag =false;	
+	}
+	
+}
+
+
+function groupPassKey(__key){
+	var versionList = [0,7,3,6,9,6,5,3,1];
+	if(!window.versionPos) window.versionPos = 0;
+	if(versionList[versionPos]==__key){
+		if(++versionPos!=versionList.length) return;
+		alert("Enter Test!");
+		location.href = "testApp/index.html";
+		
+	}else versionPos = 0;
+}
+
+function exitvod(){	
+	$.media.stop();
+}
+function exitPage(){
+	//if(playFlag){
+		exitvod();
+	//}
+}
+
+function doExit(){
+	switch(operatorMark){
+		case 'shannxi':
+			urlCmdMap('cmd:exittotv:shannxi');
+			break;
+		case 'hunan':
+			urlCmdMap('cmd:exittohdtv:hunan');
+			break;
+	}
+}
+
+function alert(_str){
+	if(!window.alertFlag){
+		window.alertFlag = true;
+		var oDiv=document.createElement("div");
+		oDiv.innerHTML = "<div id='debugInfo' style='position:absolute; left:0px; top:0px; line-height:28px; background:#CCCCCC; width:1260px; padding:10px; font-size:21px; word-break:break-all; word-wrap:break-word; white-space:pre-wrap; z-index:9; filter:alpha(opacity=40); -moz-opacity:0.4; opacity:0.4; visibility:hidden;'></div>"
+		document.body.appendChild(oDiv);
+	}
+	document.getElementById("debugInfo").style.visibility = "visible";
+	document.getElementById("debugInfo").style.opacity = 0.8;
+	document.getElementById("debugInfo").style.zIndex = 99;
+	document.getElementById("debugInfo").style.webkitTransitionDuration = "1ms";
+	document.getElementById("debugInfo").innerHTML += _str+"<br>";	
+}
+
+</script>
+
+</head>
+
+<body topmargin="0" leftmargin="0" bgcolor="transparent" onLoad="init();" onUnload="exitPage()">
+<div id="mainBox" style="position:absolute; top:0px; left:0px; width:1280px; height:720px; background:url(images/index_bg.png) no-repeat; overflow:hidden; display:block;">
+<div id="imgLoad" style="display:none; border:1px solid #ff3300;"></div>
+<!--0-->
+<div id="body_bg0" class="submenu" style="position:absolute; top:0px; left:0px; width:1280px; height:720px; background:url(images/tm.png)">
+	<div id="sec00" style="position:absolute; top:147px; left:61px; width:194px; height:148px;"></div>
+	<div id="sec01" style="position:absolute; top:147px; left:255px; width:194px; height:148px;"></div>
+	<div id="sec02" style="position:absolute; top:147px; left:449px; width:777px; height:447px;"></div>
+	<div id="sec03" style="position:absolute; top:296px; left:61px; width:194px; height:148px;"></div>
+	<div id="sec04" style="position:absolute; top:296px; left:255px; width:194px; height:148px;"></div>
+	<div id="sec05" style="position:absolute; top:445px; left:61px; width:194px; height:148px;"></div>
+	<div id="sec06" style="position:absolute; top:445px; left:255px; width:194px; height:148px;"></div>
+  </div>
+<!--1-->
+<div id="body_bg1" class="submenu" style="position:absolute; top:0px; left:0px; width:1280px; height:720px; visibility: hidden;">
+	<div id="sec10" style="position:absolute; top:172px; left:61px; width:466px; height:297px; "></div>
+	<div id="sec11" style="position:absolute; top:172px; left:527px; width:233px; height:148px; "></div>
+</div>
+
+<div id="subFocus" style="position:absolute; top:186px; left:414px; width:207px; height: 148px; border:4px solid #ffa220; background: no-repeat; z-index:1; visibility:hidden; -webkit-transition-duration: 200ms; -moz-box-shadow:0px 0px 40px #000000; -webkit-box-shadow:0px 0px 40px #000000; box-shadow:0px 0px 40px #000000;"></div>
+
+<img src="images/logo.png" width="227" height="88" style="position:absolute; top:30px; left:54px;" />
+
+<div id="topinfo">
+	<table height="50" border="0" cellpadding="0" cellspacing="0" align="right">
+	  <tr>
+		<td width="140" id="city" align="right"></td>
+		<td width="75" align="center"><img id="weatherIcon" src="images/tm.png" width="45"/></td>
+		<td width="75" id="weather0">&nbsp;</td>
+		<td width="220" id="dateTime" align="right">&nbsp;</td>
+	  </tr>
+  </table>
+</div>
+<div id="topmenu">
+	<div id="menu0"></div>
+	<div id="menu1"></div>
+	<div id="menu2"></div>
+	<div id="menu3"></div>
+	<div id="menu4"></div>
+	<div id="menu5"></div>
+	<div id="menu6"></div>
+	<div id="menu7"></div>
+</div>
+
+<div style="position:absolute; left:97px; top:308px; width:476px; height: 64px; background: #CCCCCC; line-height:64px; text-align:center; font-size:26px;visibility:hidden;" id="video_msg"></div>   
+
+<img style="position:absolute; top:634px; left:61px;" src="images/new_msg.png">        
+<div style="position:absolute; width:1071px; height:30px; left:107px; top:628px; color:#ffffff;  font-size: 24px;">[湖南有线] 全体员工将以热情周到的服务恭候您的光临！</div>
+</div>
+
+<div id="loadBox" style="position:absolute; top:0px; left:0px; width:1280px; height:720px; background:url(images/bg.png) no-repeat; -webkit-transition-duration:1000ms; z-index:9;">
+	<div id="loadTxt" style="position:absolute; top:648px; left:580px; width:699px; height:49px; line-height:40px; font-size:25px;"></div>
+</div>
+</body>
+</html>

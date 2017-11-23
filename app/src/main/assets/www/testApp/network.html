@@ -1,0 +1,48 @@
+<!doctype html>
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+
+<title>网络在线与离线</title>
+
+</head>
+
+<body>
+<a href="index.html">返回</a>
+
+<div id="status"></div>
+
+<script type="text/javascript" language="javascript" charset="utf-8">
+
+var $$=function(id){return document.getElementById(id);};
+
+ 
+
+if(navigator.onLine){
+	$$("status").innerHTML="第一次加载时在线11";
+}else{
+	$$("status").innerHTML="第一次加载时离线00";
+}
+
+ 
+
+window.addEventListener("online",online,false);
+
+function online(){
+	$$("status").innerHTML="on";
+}
+
+window.addEventListener("offline",offline,false);
+
+function offline(){
+	$$("status").innerHTML="off";
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Video.js 6.2.5</title>
+	<link href="css/video-js.css" rel="stylesheet">	
+	<style>
+
+
+video {
+    object-fit:fill;
+    
+}
+
+body {
+	font-size:30px;
+	line-height:45px;
+	color:#ffffff;
+	background-color: #191919
+}
+
+a { 
+	font-size:30px; 
+	margin-right:20px; 
+	color:#ffffff;
+}
+
+	</style>
+	
+</head>
+
+<body>
+<a href="index.html">返回</a> <a href="playVideo.html">刷新11</a>
+<br>
+<script type="text/javascript">
+
+
+function playPause()
+{ 
+
+var myVideo=document.getElementById("video1");
+
+if (myVideo.paused) 
+  myVideo.play(); 
+else 
+  myVideo.pause(); 
+
+  
+} 
+
+function makeBig()
+{ 
+
+	var myVideo=document.getElementById("video1");
+	myVideo.width=860;
+} 
+
+function makeSmall()
+{ 
+
+var myVideo=document.getElementById("video1");
+myVideo.currentTime = 180;
+myVideo.width=420; 
+
+
+} 
+
+function makeNormal()
+{ 
+var myVideo=document.getElementById("video1");
+myVideo.width=620; 
+} 
+</script> 
+
+
+<div style="text-align:center;">
+  <a href="javascript:playPause()">播放/暂停</a>   
+  <a href="javascript:makeBig()">大</a>
+  <a href="javascript:makeNormal()">中</a>
+  <a href="javascript:makeSmall()">小</a>
+  <br /> 
+
+<video id="video1" src="http://cdui.hunancatv.com/changde/video/myll/9_min.mp4" autoplay="autoplay" width=1100 height=600 autobuffer="true"></video>
+
+
+<!--
+<video id="video1" src="http://119.44.218.203:9090/mycd/hdroadPlayurl?id=961" autoplay="autoplay" width=1100 height=600 autobuffer></video>
+
+  <video id="video1" width="720" height="476" controls="controls" autoplay="autoplay">
+  <source src="http://119.44.218.203:9090/mycd/hdroadPlayurl?id=961">
+ 
+Your browser does not support the video tag.
+</video>
+
+
+
+<video id="chrome_browser_media" autoplay=""  autobuffer="true" oncanplay="$.media._success()" width="'+that.w+'" height="'+that.h+'" name="media" onended="$.media._over();"><source src="'+url+'" ></video>
+
+-->
+</div> 
+
+
+
+<!--
+
+ <source src="http://114.215.132.43:8809/changde/video/myll/9.mp4" type="video/mp4">
+
+-->
+
+</body>
+</html>
