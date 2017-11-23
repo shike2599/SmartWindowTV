@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="root_view">false</item>
+    <item type="id" name="logo_img">false</item>
+    <item type="id" name="lau_date">false</item>
+    <item type="id" name="lau_city">false</item>
+    <item type="id" name="lau_weather">false</item>
+    <item type="id" name="lau_temp">false</item>
+    <item type="id" name="btn_calendar">false</item>
+    <item type="id" name="lau_mail">false</item>
+    <item type="id" name="lau_mail_count">false</item>
+    <item type="id" name="btn_net">false</item>
+    <item type="id" name="lau_tv_layout">false</item>
+    <item type="id" name="surface_view">false</item>
+    <item type="id" name="null_data_panel">false</item>
+    <item type="id" name="error_text">false</item>
+    <item type="id" name="error_panel">false</item>
+    <item type="id" name="error_code">false</item>
+    <item type="id" name="lau_ad1">false</item>
+    <item type="id" name="lau_ad2">false</item>
+    <item type="id" name="lau_img1">false</item>
+    <item type="id" name="lau_img4">false</item>
+    <item type="id" name="lau_img2">false</item>
+    <item type="id" name="lau_img3">false</item>
+    <item type="id" name="lau_img5">false</item>
+    <item type="id" name="lau_img6">false</item>
+    <item type="id" name="lau_focus">false</item>
+    <item type="id" name="toast_text">false</item>
+</resources>

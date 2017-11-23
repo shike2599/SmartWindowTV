@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="AppTheme" parent="android:Theme.Light" />
+	  <style name="appTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowAnimationStyle">@style/appAnim</item>
+    </style>
+    <style name="appAnim">
+        <item name="android:windowEnterAnimation">@anim/app_enter</item>
+        <item name="android:windowExitAnimation">@anim/app_exit</item>
+    </style>
+</resources>

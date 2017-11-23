@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/root_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80.0dip" >
+			
+            
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="50.0dip"
+                android:text="智慧城市电视门户"
+                android:textSize="30dp"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20.0dip"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@id/lau_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+
+                <TextView
+                    android:id="@id/lau_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8.0dip"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+
+                <ImageView
+                    android:id="@id/lau_weather"
+                    android:layout_width="46.0dip"
+                    android:layout_height="46.0dip"
+                    android:layout_marginLeft="8.0dip" />
+
+                <TextView
+                    android:id="@id/lau_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8.0dip"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15.0dip"
+                    android:layout_marginRight="15.0dip"
+                    android:src="@drawable/top_line" />
+
+                <ImageButton
+                    android:id="@id/btn_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_bg"
+                    android:nextFocusLeft="@id/btn_calendar"
+                    android:src="@drawable/icon_calendar" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15.0dip"
+                    android:layout_marginRight="15.0dip"
+                    android:src="@drawable/top_line" />
+
+                <RelativeLayout
+                    android:id="@id/lau_mail"
+                    android:layout_width="55.0dip"
+                    android:layout_height="55.0dip"
+                    android:background="@drawable/btn_bg"
+                    android:clickable="true"
+                    android:focusable="true" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/icon_mail" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15.0dip"
+                    android:layout_marginRight="15.0dip"
+                    android:src="@drawable/top_line" />
+
+                <ImageButton
+                    android:id="@id/btn_net"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_bg"
+                    android:nextFocusRight="@id/btn_net"
+                    android:src="@drawable/icon_card_error" />
+            </LinearLayout>
+            
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@id/lau_tv_layout"
+                    android:layout_width="446.0dip"
+                    android:layout_height="287.0dip"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true" >
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/icon_tv"
+                        android:padding="5.0dip" >
+
+                        <SurfaceView
+                            android:id="@id/surface_view"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:background="@drawable/tv_focus"
+                            android:nextFocusLeft="@id/surface_view" />
+
+                        <LinearLayout
+                            android:id="@id/null_data_panel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/error_bg"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="30.0dip"
+                            android:visibility="gone" >
+
+                            <TextView
+                                android:id="@id/error_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxWidth="350.0dip"
+                                android:text="@string/channel_is_null"
+                                android:textColor="@android:color/white"
+                                android:textSize="22.0sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@id/error_panel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/error_bg"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="30.0dip"
+                            android:visibility="gone" >
+
+                            <TextView
+                                android:id="@id/error_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:maxWidth="350.0dip"
+                                android:textColor="@android:color/white"
+                                android:textSize="22.0sp" />
+
+                            <TextView
+                                android:id="@id/error_code"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:maxWidth="350.0dip"
+                                android:textColor="@android:color/white"
+                                android:textSize="22.0sp" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10.0dip" >
+
+                    <ImageView
+                        android:id="@id/lau_ad1"
+                        android:layout_width="219.0dip"
+                        android:layout_height="84.0dip"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/tv_focus"
+                        android:src="@drawable/ad1_def_bg"
+                        android:tag="ad1" />
+
+                    <ImageView
+                        android:id="@id/lau_ad2"
+                        android:layout_width="219.0dip"
+                        android:layout_height="84.0dip"
+                        android:layout_marginLeft="10.0dip"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="@drawable/tv_focus"
+                        android:focusableInTouchMode="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ad2_def_bg"
+                        android:tag="ad2" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip" >
+
+                <ImageView
+                    android:id="@id/lau_img1"
+                    android:layout_width="446.0dip"
+                    android:layout_height="250.0dip"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:nextFocusRight="@id/lau_img4"
+                    android:background="@drawable/tv_focus"
+                    android:scaleType="fitXY"
+                    
+                    android:src="@drawable/vod1_def_bg"
+                    android:tag="img1" />
+
+                <ImageView
+                    android:id="@id/lau_img2"
+                    android:layout_width="218.0dip"
+                    android:layout_height="120.0dip"
+                    android:layout_below="@id/lau_img1"
+                    android:layout_marginTop="10.0dip"
+                    android:background="@drawable/tv_focus"
+                    
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/vod2_def_bg"
+                    android:tag="img2" />
+
+                <ImageView
+                    android:id="@id/lau_img3"
+                    android:layout_width="218.0dip"
+                    android:layout_height="120.0dip"
+                    android:layout_below="@id/lau_img1"
+                    android:layout_marginLeft="10.0dip"
+                    android:layout_marginTop="10.0dip"
+                    android:background="@drawable/tv_focus"
+                    android:layout_toRightOf="@id/lau_img2"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/vod3_def_bg"
+                    android:tag="img3" />
+
+                <ImageView
+                    android:id="@id/lau_img4"
+                    android:layout_width="218.0dip"
+                    android:layout_height="120.0dip"
+                    android:layout_marginLeft="10.0dip"
+                    android:layout_toRightOf="@id/lau_img1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/tv_focus"
+                    android:focusableInTouchMode="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/vod5_def_bg"
+                    android:tag="img4" />
+
+                <ImageView
+                    android:id="@id/lau_img5"
+                    android:layout_width="218.0dip"
+                    android:layout_height="120.0dip"
+                    android:layout_below="@id/lau_img4"
+                    android:layout_marginLeft="10.0dip"
+                    android:background="@drawable/tv_focus"
+                    android:layout_marginTop="10.0dip"
+                    android:layout_toRightOf="@id/lau_img1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/vod6_def_bg"
+                    android:tag="img5" />
+
+                <ImageView
+                    android:id="@id/lau_img6"
+                    android:layout_width="218.0dip"
+                    android:layout_height="120.0dip"
+                    android:layout_below="@id/lau_img5"
+                    android:layout_marginLeft="10.0dip"
+                    android:background="@drawable/tv_focus"
+                    android:layout_marginTop="10.0dip"
+                    android:layout_toRightOf="@id/lau_img1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/vod7_def_bg"
+                    android:tag="img6" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="126.0dip"
+            android:gravity="center" >
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/lau_menu1"
+                    android:layout_width="112.0dip"
+                    android:layout_height="108.0dip"
+                    android:background="@drawable/menu_bg"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/icon_1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:nextFocusLeft="@id/lau_menu1"
+                    android:paddingTop="5.0dip"
+                    android:text="@string/menu1"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_line" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/lau_menu2"
+                    android:layout_width="112.0dip"
+                    android:layout_height="108.0dip"
+                    android:background="@drawable/menu_bg"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/icon_2"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="5.0dip"
+                    android:text="@string/menu2_1"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_line" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/lau_menu3"
+                    android:layout_width="112.0dip"
+                    android:layout_height="108.0dip"
+                    android:background="@drawable/menu_bg"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/icon_3"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="5.0dip"
+                    android:text="@string/menu3"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_line" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/lau_menu4"
+                    android:layout_width="112.0dip"
+                    android:layout_height="108.0dip"
+                    android:background="@drawable/menu_bg"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/icon_4"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="5.0dip"
+                    android:text="@string/menu4"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_line" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/lau_menu5"
+                    android:layout_width="112.0dip"
+                    android:layout_height="108.0dip"
+                    android:background="@drawable/menu_bg"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/icon_5"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="5.0dip"
+                    android:text="@string/menu5"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_line" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/lau_menu6"
+                    android:layout_width="112.0dip"
+                    android:layout_height="108.0dip"
+                    android:background="@drawable/menu_bg"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/icon_6"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="5.0dip"
+                    android:text="@string/menu6"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_line" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/lau_menu7"
+                    android:layout_width="112.0dip"
+                    android:layout_height="108.0dip"
+                    android:background="@drawable/menu_bg"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/icon_7"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="5.0dip"
+                    android:text="@string/menu7"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_line" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/lau_menu8"
+                    android:layout_width="112.0dip"
+                    android:layout_height="108.0dip"
+                    android:background="@drawable/menu_bg"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/icon_8"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:nextFocusRight="@id/lau_menu8"
+                    android:paddingTop="5.0dip"
+                    android:text="@string/menu8"
+                    android:textColor="@android:color/white"
+                    android:textSize="22.0sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@id/lau_focus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/focus"
+        android:drawablePadding="-80.0dip"
+        android:gravity="bottom|center"
+        android:paddingBottom="20.0dip"
+        android:textColor="@android:color/white"
+        android:textSize="18.0sp"
+        android:visibility="gone" />
+
+</RelativeLayout>

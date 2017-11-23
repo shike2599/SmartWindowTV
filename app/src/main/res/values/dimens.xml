@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="main_padding">15.0dip</dimen>
+    <dimen name="normal_padding">10.0dip</dimen>
+    <dimen name="activity_horizontal_margin">16.0dip</dimen>
+    <dimen name="activity_vertical_margin">16.0dip</dimen>
+    <dimen name="bigtitle_size">30.0sp</dimen>
+    <dimen name="title_size">24.0sp</dimen>
+    <dimen name="content_size">20.0sp</dimen>
+</resources>

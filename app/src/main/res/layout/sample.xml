@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:background="#000000"
+    >
+    
+    
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <SurfaceView
+                android:id="@+id/surface"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                />
+
+            
+            
+        </LinearLayout>
+    </FrameLayout>
+
+	<FrameLayout 
+	    android:id="@+id/dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:background="#00000000"
+        android:orientation="horizontal"
+        android:padding="0dip"
+        android:visibility="visible" 
+	    >
+        
+	  <ProgressBar
+                android:id="@+id/progressBar1"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+	  <TextView 
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:text="加载中....."
+	      android:layout_gravity="bottom|center_horizontal"
+	      />
+	    
+	</FrameLayout>
+</RelativeLayout>

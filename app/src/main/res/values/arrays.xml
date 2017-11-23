@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ipname">
+       
+        <item>33</item>
+        <item>80</item>
+    </string-array>
+    <!-- 
+        <item>社区外网</item>
+        <item>社区内网</item>
+     	<item>党建外网</item>
+        <item>党建内网</item>
+     -->
+    <string-array name="ipurl">
+        <item>10.43.116.33</item>
+        <item>10.43.116.80</item>
+    </string-array>
+    <!-- 
+        <item>community.hisugj.com</item>
+        <item>10.14.1.210:8809</item>
+        <item>dj.hisugj.com</item>
+        <item>10.14.1.210:8991</item>
+     -->
+</resources>
