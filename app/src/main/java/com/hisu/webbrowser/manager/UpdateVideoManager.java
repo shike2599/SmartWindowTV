@@ -3,10 +3,25 @@ package com.hisu.webbrowser.manager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.hisu.webbrowser.R;
 import com.hisu.webbrowser.mode.AppMsg;
 import com.hisu.webbrowser.mode.CacheVideo;
 import com.hisu.webbrowser.mode.WebInterface;
@@ -17,23 +32,6 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-
-
-
-import com.hisu.webbrowser.R;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Environment;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class UpdateVideoManager {
 	List<CacheVideo> mVideoList;
@@ -59,21 +57,22 @@ public class UpdateVideoManager {
 				mProgressBar.setProgress(progress);
 				break;
 			case HAS_NOT_NEW_VERSION:
-				Toast.makeText(mContext, R.string.soft_update_no, Toast.LENGTH_SHORT).show();
+//				Toast.makeText(mContext, R.string.soft_update_no, Toast.LENGTH_SHORT).show();
 				mMainHandler.sendEmptyMessage(1);
 				break;
 			case DOWNLOAD_FAILED:
 				Toast.makeText(mContext, R.string.soft_download_failed, Toast.LENGTH_SHORT).show();
 			case DOWNLOAD_FINISH:
-				mDownloadDialog.dismiss();
+				if(mDownloadDialog != null){
+					
+					mDownloadDialog.dismiss();
+				}
 				mIndex ++;
-
 			case HAS_NEW_VERSION:
 				if(WebInterface.DOWNVIDEO){
 					
 				if(mIndex<mVideoList.size()){
 					showDownloadDialog();
-					
 					downloadFile(mVideoList.get(mIndex));
 				}else{
 					mMainHandler.sendEmptyMessage(1);
@@ -223,11 +222,15 @@ public class UpdateVideoManager {
 		        @Override
 		        public void onStart() {
 		            //testTextView.setText("conn...");
+//		          	if(!mDownloadDialog.isShowing()){
+//		        		showDownloadDialog();
+//		        	}
 		        }
 
 		        @Override
 		        public void onLoading(long total, long current, boolean isUploading) {
 		            //testTextView.setText(current + "/" + total);
+		       
 		        	progress = (int) (((float) current / total) * 100);
 		        	Log.e("onLoading", "onLoading");
 					mHandler.sendEmptyMessage(DOWNLOAD);

@@ -367,10 +367,12 @@ public class LibVLC {
              * for 320x170 H.264, a few packets less on higher resolutions.
              * On Nexus S, the decoder latency seems to be about 7 packets.
              */
-            options.add(":file-caching=1500");
-            options.add(":network-caching=1500");
-            options.add(":live-caching=10");//直播缓存  
-            options.add(":sout-mux-caching=10");//输出缓存
+            options.add(":file-caching=1500");//文件缓存
+            options.add(":network-caching=1500");//网络缓存
+            options.add(":live-caching=100");//直播缓存  
+            options.add(":sout-mux-caching=100");//输出缓存
+//            options.add(":live-caching=10");//直播缓存  
+//            options.add(":sout-mux-caching=10");//输出缓存
             options.add(":codec="+ (this.devCodecList != null ? this.devCodecList : this.codecList));
         }
         if (noVideo)

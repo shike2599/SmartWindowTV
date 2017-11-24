@@ -86,7 +86,7 @@ public class LLUtil {
 	
 							if (200 == resp.getInt("resultCode")) {
 								
-								HashMap<String,SysVideo> map = getsysvideolist(response.result); 
+								HashMap<String,SysVideo> map = getsysvideolist(response.result);
 								SysVideo syslo = map.get(LOGO);
 								
 //								Log.e("��������syslo", ""+share.getInt(LOGO, -1)+"/"+ Integer.parseInt(syslo.getCode()));

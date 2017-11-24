@@ -2,25 +2,16 @@ package com.hisu.webbrowser.adapter;
 
 import java.io.File;
 
-
-
-
-
-
-
-import com.hisu.webbrowser.R;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.hisu.webbrowser.R;
 
 public class UpathAdapter extends BaseAdapter{
 	
@@ -76,7 +67,7 @@ public class UpathAdapter extends BaseAdapter{
 	}
 	
 	/*
-	 * ��Ƶ����ͼ
+	 * 视频缩略图
 	 * */
 	public static Bitmap getVideoThumbnail(String videoPath) {
 		  MediaMetadataRetriever media =new MediaMetadataRetriever();

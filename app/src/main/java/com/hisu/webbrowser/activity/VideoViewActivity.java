@@ -1,23 +1,21 @@
 package com.hisu.webbrowser.activity;
 
-import java.net.URI;
-import java.net.URL;
-
-import com.hisu.webbrowser.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
-import android.widget.MediaController;
+import android.view.View;
 import android.widget.VideoView;
+
+import com.hisu.webbrowser.R;
 
 public class VideoViewActivity extends Activity{
 	
 	private VideoView videoview;
 	private Intent in;
 	private String path;
+	private View dialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +24,35 @@ public class VideoViewActivity extends Activity{
 		setContentView(R.layout.activity_videoview);
 		videoview = (VideoView) findViewById(R.id.viedoview);
 		initdata();
-		//������Ƶ������
-		videoview.setMediaController(new MediaController(this));
-	 
-	    //������ɻص�
+		initView();
+		//设置视频控制器
+//		videoview.setMediaController(new MediaController(this));
+
+		videoview.setOnPreparedListener(new OnPreparedListener() {
+
+			@Override
+			public void onPrepared(MediaPlayer mp) {
+				// TODO Auto-generated method stub
+				dialog.setVisibility(View.GONE);
+			}
+		});
+
+		//播放完成回调
 		videoview.setOnCompletionListener( new MyPlayerOnCompletionListener());
-	 
-	    //������Ƶ·��
-		videoview.setVideoURI( Uri.parse(path));
+
+		//设置视频路径
+		videoview.setVideoPath(path);
 	 
 		videoview.start();
 	}
 	
 	
+	private void initView() {
+		// TODO Auto-generated method stub
+		dialog =  findViewById(R.id.dialog1);
+	}
+
+
 	private class MyPlayerOnCompletionListener implements MediaPlayer.OnCompletionListener{
 
 		@Override

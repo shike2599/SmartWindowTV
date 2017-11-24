@@ -12,9 +12,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.security.MessageDigest;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
-
 import org.apache.http.conn.util.InetAddressUtils;
 
 import android.app.Activity;
@@ -33,8 +31,6 @@ import android.graphics.PorterDuff.Mode;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -55,7 +51,7 @@ public class ToolsUtil {
 	}
 
 	/***
-	 * 鍒涘缓鏂囦欢
+	 * 创建文件
 	 */
 	public static void createFile(String name) {
 		if (Environment.MEDIA_MOUNTED.equals(Environment
@@ -79,7 +75,7 @@ public class ToolsUtil {
 	}
 
 	/***
-	 * hash鍔犲瘑
+	 * hash加密
 	 * 
 	 * @param str
 	 * @return
@@ -112,7 +108,7 @@ public class ToolsUtil {
 	}
 
 	/**
-	 * 鍒ゆ柇鏄惁鏈夌綉缁滆繛鎺�
+	 * 判断是否有网络连接
 	 * 
 	 * @param context
 	 * @return
@@ -131,7 +127,7 @@ public class ToolsUtil {
 	}
 
 	/**
-	 * 鍒ゆ柇WIFI缃戠粶鏄惁杩炴帴
+	 * 判断WIFI网络是否连接
 	 * 
 	 * @param context
 	 * @return
@@ -151,7 +147,7 @@ public class ToolsUtil {
 	}
 
 	/**
-	 * 鍒ゆ柇MOBILE缃戠粶鏄惁鍙敤
+	 * 判断MOBILE网络是否可用
 	 * 
 	 * @param context
 	 * @return
@@ -170,7 +166,7 @@ public class ToolsUtil {
 	}
 
 	/**
-	 * 鎾彿鐮�
+	 * 播号码
 	 * 
 	 * @param context
 	 * @param number
@@ -183,10 +179,10 @@ public class ToolsUtil {
 	}
 
 	/**
-	 * 杞崲鍥剧墖鎴愬渾褰�
+	 * 转换图片成圆形
 	 * 
 	 * @param bitmap
-	 *            浼犲叆Bitmap瀵硅薄
+	 *            传入Bitmap对象
 	 * @return
 	 */
 	public static Bitmap toRoundBitmap(Bitmap bitmap) {
@@ -242,11 +238,11 @@ public class ToolsUtil {
 	}
 
 	/**
-	 * 瀵瑰瓧绗︿覆杩涜md5鍔犲瘑
+	 * 对字符串进行md5加密
 	 * 
 	 * @param md5str
-	 *            寰呭姞瀵嗙殑瀛楃涓�
-	 * @return 鍔犲瘑鍚庣殑32浣嶅瓧绗︿覆
+	 *            待加密的字符串
+	 * @return 加密后的32位字符串
 	 */
 	public static String md5(String md5str) {
 		try {
@@ -281,7 +277,7 @@ public class ToolsUtil {
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
-			File photoFile = new File(path, photoName); // 鍦ㄦ寚瀹氳矾寰勪笅鍒涘缓鏂囦欢
+			File photoFile = new File(path, photoName); // 在指定路径下创建文件
 			FileOutputStream fileOutputStream = null;
 			try {
 				fileOutputStream = new FileOutputStream(photoFile);
@@ -314,7 +310,7 @@ public class ToolsUtil {
 	}
 
 	/**
-	 * 鑾峰彇鏂囦欢鍐呭
+	 * 获取文件内容
 	 * 
 	 * @param context
 	 * @param fileName
@@ -355,7 +351,7 @@ public class ToolsUtil {
 	}
 
 	/**
-	 * 鍒涘缓蹇嵎鏂瑰紡
+	 * 创建快捷方式
 	 * 
 	 * @param context
 	 * @param fileName
@@ -369,25 +365,25 @@ public class ToolsUtil {
 
 		Intent shortcutintent = new Intent(
 				"com.android.launcher.action.INSTALL_SHORTCUT");
-		// 涓嶅厑璁搁噸澶嶅垱寤�
+		// 不允许重复创建
 		shortcutintent.putExtra("duplicate", false);
-		// 闇�瑕佺幇瀹炵殑鍚嶇О
+		// 需要现实的名称
 		shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
 				act.getString(appnameResId));
-		// 蹇嵎鍥剧墖
+		// 快捷图片
 		Parcelable icon = Intent.ShortcutIconResource.fromContext(
 				act.getApplicationContext(), iconResId);
 		shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
-		// 鐐瑰嚮蹇嵎鍥剧墖锛岃繍琛岀殑绋嬪簭涓诲叆鍙�
+		// 点击快捷图片，运行的程序主入口
 		shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT,
 				new Intent(act.getApplicationContext(), act.getClass()));
-		// 鍙戦�佸箍鎾�
+		// 发送广播
 		act.sendBroadcast(shortcutintent);
 	}
 
 	/**
 	 * 
-	 * 鏍规嵁鎵嬫満鐨勫垎杈ㄧ巼浠� dp 鐨勫崟浣� 杞垚涓� px(鍍忕礌)
+	 * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
 	 */
 
 	public static int dip2px(Context context, float dpValue) {
@@ -400,7 +396,7 @@ public class ToolsUtil {
 
 	/**
 	 * 
-	 * 鏍规嵁鎵嬫満鐨勫垎杈ㄧ巼浠� px(鍍忕礌) 鐨勫崟浣� 杞垚涓� dp
+	 * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
 	 */
 
 	public static int px2dip(Context context, float pxValue) {
@@ -412,9 +408,9 @@ public class ToolsUtil {
 	}
 	
 	/**
-	 * 鍒ゆ柇妯珫灞�
+	 * 判断横竖屏
 	 * @param activity
-	 * @return 1锛氱珫 | 0锛氭í
+	 * @return 1：竖 | 0：横
 	 */
 	public static int ScreenOrient(Activity activity)
 	{
@@ -460,7 +456,6 @@ public class ToolsUtil {
 			e.printStackTrace();
 		}
 		return mac_s;
-//		return "a8-bd-3a-55-00-1d";
 	}
 
 	public static String byte2hex(byte[] b) {
@@ -495,70 +490,4 @@ public class ToolsUtil {
 		}
 		return sb.toString();
 	}
-	/*
-	 * MAC 有线
-	 * */
-	public static String getLocalEthernetMacAddress() {  
-        String mac=null;  
-        try {  
-            Enumeration localEnumeration=NetworkInterface.getNetworkInterfaces();  
-  
-            while (localEnumeration.hasMoreElements()) {  
-                NetworkInterface localNetworkInterface=(NetworkInterface) localEnumeration.nextElement();  
-                String interfaceName=localNetworkInterface.getDisplayName();  
-  
-                if (interfaceName==null) {  
-                    continue;  
-                }  
-  
-                if (interfaceName.equals("eth0")) {  
-                    mac=convertToMac(localNetworkInterface.getHardwareAddress());  
-                    if (mac!=null&&mac.startsWith("0:")) {  
-                        mac="0"+mac;  
-                    }  
-                    break;  
-                }  
-  
-            }  
-        } catch (SocketException e) {  
-            e.printStackTrace();  
-        }  
-        return mac;  
-    }  
-  
-    private static String convertToMac(byte[] mac) {  
-        StringBuilder sb=new StringBuilder();  
-        for (int i=0; i<mac.length; i++) {  
-            byte b=mac[i];  
-            int value=0;  
-            if (b>=0&&b<=16) {  
-                value=b;  
-                sb.append("0"+Integer.toHexString(value));  
-            } else if (b>16) {  
-                value=b;  
-                sb.append(Integer.toHexString(value));  
-            } else {  
-                value=256+b;  
-                sb.append(Integer.toHexString(value));  
-            }  
-            if (i!=mac.length-1) {  
-                sb.append(":");  
-            }  
-        }  
-        return sb.toString();  
-    }  
-    /*
-     * MAC 无线
-     * */
-    public static String getWifiMacAddr(Context context, String macAddr) {  
-        WifiManager wifi=(WifiManager) context.getSystemService(Context.WIFI_SERVICE);  
-        WifiInfo info=wifi.getConnectionInfo();  
-        if (null!=info) {  
-            String addr=info.getMacAddress();  
-            if (null!=addr) {  
-                macAddr=addr;  
-            }  
-        }  
-        return macAddr;  
-    }  
 }

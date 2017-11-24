@@ -12,8 +12,8 @@ import java.util.Date;
 public abstract class CommonFunction {
 
 	/**
-	 *打印日志时获取当前的程序文件名、行号、方法名 输出格式为：[FileName | LineNumber | MethodName]
-	 * 
+	 * 打印日志时获取当前的程序文件名、行号、方法名 输出格式为：[FileName | LineNumber | MethodName]
+	 *
 	 * @return
 	 */
 	public static String getFileLineMethod() {
@@ -25,25 +25,25 @@ public abstract class CommonFunction {
 		return toStringBuffer.toString();
 	}
 
-	// ��ǰ�ļ�
+	// 当前文件
 	public static String _FILE_() {
 		StackTraceElement traceElement = ((new Exception()).getStackTrace())[1];
 		return traceElement.getFileName();
 	}
 
-	// ��ǰ����
+	// 当前方法
 	public static String _FUNC_() {
 		StackTraceElement traceElement = ((new Exception()).getStackTrace())[1];
 		return traceElement.getMethodName();
 	}
 
-	// ��ǰ�к�
+	// 当前行号
 	public static int _LINE_() {
 		StackTraceElement traceElement = ((new Exception()).getStackTrace())[1];
 		return traceElement.getLineNumber();
 	}
 
-	// ��ǰʱ��
+	// 当前时间
 	public static String _TIME_() {
 		Date now = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");

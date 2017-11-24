@@ -1,56 +1,40 @@
 	package com.hisu.webbrowser;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-import com.hisu.webbrowser.R;
-import com.hisu.webbrowser.manager.UpdateManager;
-import com.hisu.webbrowser.manager.UpdateVideoManager;
-import com.hisu.webbrowser.mode.WebInterface;
-import com.hisu.webbrowser.player.WebPlayer;
-import com.hisu.webbrowser.util.BrowserEvent;
-import com.hisu.webbrowser.util.DataUtil;
-import com.hisu.webbrowser.util.LLUtil;
-import com.hisu.webbrowser.util.ToolsUtil;
-
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.webkit.WebSettings.LayoutAlgorithm;
-import android.webkit.WebSettings.ZoomDensity;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,9 +43,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-public class MainActivity extends Activity {
+import com.hisu.webbrowser.R;
+import com.hisu.webbrowser.manager.UpdateManager;
+import com.hisu.webbrowser.manager.UpdateVideoManager;
+import com.hisu.webbrowser.mode.WebInterface;
+import com.hisu.webbrowser.player.WebPlayer;
+import com.hisu.webbrowser.util.BrowserEvent;
+import com.hisu.webbrowser.util.DataUtil;
+import com.hisu.webbrowser.util.ToolsUtil;
+
+	public class MainActivity extends Activity {
 	private static final String TAG = "SmartHotelViewApp";
 	private static final String CURRENT_URL = "webViewCurrentUrl";
 	private WebBrowser mBrowser = null;
@@ -80,63 +72,61 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
-				
-				//������
-				Random rnd = new Random();
-				String url = mUrl + (mUrl.indexOf("?") > -1 ? "&" : "?")
-						+ "Sbory_Math_Random=" + rnd.nextInt();
-				mBrowser.loadUrl(url);
-				
-				defaultImage.clearAnimation();
-				defaultImage.setVisibility(View.INVISIBLE);
-				//������
-				
-				
 				if (ToolsUtil.isNetworkConnected(mContext)) {
 					String mac = ToolsUtil.getLocalMacAddressFromIp(mContext);
-					Log.e("MAC", mac);
+					
+//					Toast.makeText(getApplication(), "mac" + mac,Toast.LENGTH_SHORT).show();
+					
+//					String mac = android.os.SystemProperties.get("persist.sys.mmcp.smartcard");//数码盒子ca
+//					String mac = android.os.SystemProperties.get("persist.sys.ca.card_id");//茁壮盒子ca
+//					String mac = "8420610621539759";
 					if("".equals(mac)||mac == null ){
-						Toast.makeText(getApplication(), "CA卡获取失败",Toast.LENGTH_SHORT);
+						Toast.makeText(getApplication(), "CA卡获取失败",Toast.LENGTH_SHORT).show();
 						return;
 					}
 					Log.d(TAG, " mac = " + mac);
 					if (!TextUtils.isEmpty(mac)) {
-						// ��Ȿ����Ƶ����
+						// 检测本地视频更新
 						UpdateVideoManager uvm = new UpdateVideoManager(
 								mContext, mHandler);
-						uvm.checkUpdate(mac);     
+						uvm.checkUpdate(mac);   
+//						sendEmptyMessageDelayed(1, 2000);
 						break;
 					}
 				}
+					 
+					timer += 5;
+					if (timer >= 10) {
+						isSetting = true;
+						showPwdDialog();
+						Toast.makeText(mContext, "网络异常，请检查网络", Toast.LENGTH_LONG).show();
+					finish();    //襄阳项目使用
+					} else {
+						Toast.makeText(mContext, "请检查网络连接！", Toast.LENGTH_SHORT).show();
+						sendEmptyMessageDelayed(handler, 2000);
+					}
+				
 
-				timer += 5;
-				if (timer >= 15) {
-					isSetting = true;
-					startdvb();
-					Toast.makeText(mContext, "网络异常，请检查网络", Toast.LENGTH_LONG).show();
-				} else {
-					Toast.makeText(mContext, "请检查网络连接！", Toast.LENGTH_SHORT).show();
-//					sendEmptyMessageDelayed(handler, 5000);
-				}
 				break;
 			case 1:
-				// ���汾����
+				// 检测版本更新
+				
 				UpdateManager um = new UpdateManager(mContext,
 						MainActivity.this);
 				um.checkUpdate();
 
-				Random rnd2 = new Random();
-				String url2 = mUrl + (mUrl.indexOf("?") > -1 ? "&" : "?")
-						+ "Sbory_Math_Random=" + rnd2.nextInt();
+				Random rnd = new Random();
+				String url = mUrl + (mUrl.indexOf("?") > -1 ? "&" : "?")
+						+ "Sbory_Math_Random=" + rnd.nextInt();
 				// url += "&stbMac=52-54-4F-FF-FF-F6";
-//				mBrowser.loadUrl(url2);   //����
+				Log.d(TAG, " mUrl = " + url);
+			
+				mBrowser.loadUrl(url);
 				// mTimer.schedule(mTask, 10);
-				Log.d(TAG, " mUrl = " + mUrl);
-//				sendEmptyMessageDelayed(2, 2000);//����
+				sendEmptyMessageDelayed(2, 2000);
 
 				break;
 			case 2:
-
 				defaultImage.clearAnimation();
 				defaultImage.setVisibility(View.INVISIBLE);
 				break;
@@ -148,6 +138,7 @@ public class MainActivity extends Activity {
 		};
 	};
 	
+	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -155,28 +146,55 @@ public class MainActivity extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
 		
-		defaultImage = (ImageView) findViewById(R.id.defaultImage);
+  		defaultImage = (ImageView) findViewById(R.id.defaultImage);
 		
-		/*�ж��Ƿ����޸ĵ�����IP
+		/*判断是否有修改的启动IP
 		 * */
 		DataUtil data = new DataUtil(this);
 //		if(data.getsharepreferences(http) != null){
-////			Log.e("����",data.getsharepreferences(http));
 //			WebInterface.URL_PREFIX = data.getsharepreferences(http);
-////			Toast.makeText(getApplication(), WebInterface.URL_PREFIX,Toast.LENGTH_LONG).show();
+//			Toast.makeText(getApplication(), WebInterface.URL_PREFIX,Toast.LENGTH_LONG).show();
 //		}
+//		initbackground();
 		//		new SystemScript(mHandler, getApplication(), MainActivity.this).openVLC("http://192.168.1.168:80/hdmi_ext");
-		if (WebInterface.DOWNOPENSYSVIDEO){
-			
-			new LLUtil(MainActivity.this).checkSystemVideo();
-		}
 		
 		mUrl = WebInterface.DEFAULT_HOME_PAGE();
+//		mUrl = "http://www.baidu.com";
 
 		Intent intent = getIntent();
+		
+		if(intent != null && intent.getIntExtra("type", -1) != -1){
+			mUrl = mUrl + "?jump_type=" + intent.getIntExtra("type", -1);
+		}
+		
+//		Toast.makeText(getApplication(), mUrl, Toast.LENGTH_LONG).show();
 		if (intent != null && intent.getStringExtra("url") != null) {
 			mUrl = intent.getStringExtra("url");
 		}
+		
+//
+//		if(intent != null && intent.getIntExtra("id", -1) != -1){
+//			
+//			int id = intent.getIntExtra("id", -1);
+//			Toast.makeText(mContext, "===" + id, Toast.LENGTH_SHORT).show();
+//			switch (id) {
+//			case 1:
+//				//改变跳转的地址
+//				//社区风采
+//				mUrl = "http://community.hisugj.com/smart_file/sys_file/hotel/57/static/sqfc_zzj/lang_zh/index.htm";
+//				break;
+//			case 2:
+//				//居家养老
+//				mUrl = "http://community.hisugj.com/smart_file/sys_file/hotel/57/static/yjhj/lang_zh/index.htm";
+//				break;
+//
+//			default:
+//				break;
+//			}
+//			
+//		}
+		
+		
 		mUrl = savedInstanceState == null
 				|| !savedInstanceState.containsKey(CURRENT_URL) ? mUrl
 				: savedInstanceState.getString(CURRENT_URL);
@@ -188,46 +206,35 @@ public class MainActivity extends Activity {
 		WebPlayer webPlayer = new WebPlayer(surfaceView, width, height);
 
 		webView = (WebView) findViewById(R.id.htmlview);
-		// webView.loadUrl(mUrl);
-		// webView.setVisibility(View.GONE);
+//		 webView.loadUrl(mUrl);
+//		 webView.setVisibility(View.GONE);
 
 		mBrowser = new WebBrowser(webView, MainActivity.this, webPlayer,
 				defaultImage, MainActivity.this);
-
 		// boolean newEnter = savedInstanceState == null ||
 		// !savedInstanceState.containsKey(CURRENT_URL);
 		deleteFilesByDirectory(mContext.getCacheDir());
 		cleanExternalCache(mContext);
-//		Toast.makeText(mContext, "�����������磬���Ժ�...", Toast.LENGTH_LONG).show();
+//		Toast.makeText(mContext, "正在连接网络，请稍候...", Toast.LENGTH_LONG).show();
 
 		/*
-		 * 0 ���ر�����Ƶ 1 ������
+		 * 0 下载本地视频 1 不下载
 		 */
-		mHandler.sendEmptyMessageDelayed(handler, 5000);
+		mHandler.sendEmptyMessageDelayed(handler, 2000);
 		mBrowser.clearCache();
 		mBrowser.clearWebViewCache();
 		// mBrowser.loadUrl(mUrl);
 	}
 	
 	/*
-	 * ��������ͼƬ
+	 * 更换背景图片
 	 * */
 	private void initbackground() {
 		// TODO Auto-generated method stub
 	}
-	
-	private void startdvb(){
-//		Intent intent = getPackageManager().getLaunchIntentForPackage("com.hisu.dvbplayer/com.hisu.dvbplayer.DVBPlayerActivity");
-		Intent intent = new Intent();
-		 ComponentName localComponentName = new
-		 ComponentName("com.hisu.dvbplayer",
-		 "com.hisu.dvbplayer.DVBPlayerActivity");
-		 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		 intent.setComponent(localComponentName);
-		 getApplication().startActivity(intent);
-	}
 	protected void showPwdDialog() {
 		// TODO Auto-generated method stub
+		ShutDown = true;
 		Builder builder = new Builder(mContext);
 		View view = View.inflate(mContext, R.layout.dialog_pwd, null);
 		builder.setView(view);
@@ -236,28 +243,28 @@ public class MainActivity extends Activity {
 		mDialog.setCanceledOnTouchOutside(false);
 
 		Button btn_yes = (Button) view.findViewById(R.id.btn_yes);
-		final Button btn_input = (Button) view.findViewById(R.id.btn_input);
-		Button btn_no = (Button) view.findViewById(R.id.btn_no);
-		final TextView tv_tip = (TextView) view.findViewById(R.id.tv_tip);
+//		final Button btn_input = (Button) view.findViewById(R.id.btn_input);
+//		Button btn_no = (Button) view.findViewById(R.id.btn_no);
+//		final TextView tv_tip = (TextView) view.findViewById(R.id.tv_tip);
 
 		/*
-		 * ��������
+		 * 启动电视
 		 */
-		Button btn_toTV = (Button) view.findViewById(R.id.gototv);
-		btn_toTV.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = mContext.getPackageManager()
-						.getLaunchIntentForPackage(getResources().getString(R.string.system_dvb));
-				startActivity(intent);
-				mDialog.dismiss();
-			}
-		});
+//		Button btn_toTV = (Button) view.findViewById(R.id.gototv);
+//		btn_toTV.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				Intent intent = mContext.getPackageManager()
+//						.getLaunchIntentForPackage(getResources().getString(R.string.system_dvb));
+//				startActivity(intent);
+//				mDialog.dismiss();
+//			}
+//		});
 
 		/*
-		 * ����
+		 * 常德
 		 */
 
 		btn_yes.setOnClickListener(new OnClickListener() {
@@ -265,66 +272,67 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String inputString = btn_input.getText().toString();
-				if (!"****".equals(inputString)) {
-					tv_tip.setText("工程密码不正确");
-					Message msg = new Message();
-					msg.what = 3;
-					msg.obj = tv_tip;
-					mHandler.sendMessageDelayed(msg, 1000);
-				} else {
-					String packageName = getString(R.string.system_set_package);
-					Intent intent = mContext.getPackageManager()
-							.getLaunchIntentForPackage(packageName);
-					try {
-						startActivity(intent);
-						isSetting = true;
-						mDialog.dismiss();
-					} catch (ActivityNotFoundException ane) {
-						Log.d(TAG,
-								"SW_OPEN_APP ============SYSTEM_SETTINGS ActivityNotFoundException========");
-//						Toast.makeText(mContext, "δ�������ð�" + packageName,Toast.LENGTH_SHORT).show();
-						isSetting = false;
-					}
-				}
+//				String inputString = btn_input.getText().toString();
+//				if (!"****".equals(inputString)) {
+//					tv_tip.setText("工程密码不正确");
+//					Message msg = new Message();
+//					msg.what = 3;
+//					msg.obj = tv_tip;
+//					mHandler.sendMessageDelayed(msg, 1000);
+//				} else {
+//					String packageName = getString(R.string.system_set_package);
+//					Intent intent = mContext.getPackageManager()
+//							.getLaunchIntentForPackage(packageName);
+//					try {
+//						startActivity(intent);
+//						isSetting = true;
+//						mDialog.dismiss();
+//					} catch (ActivityNotFoundException ane) {
+//						Log.d(TAG,
+//								"SW_OPEN_APP ============SYSTEM_SETTINGS ActivityNotFoundException========");
+////						Toast.makeText(mContext, "未发现设置包" + packageName,Toast.LENGTH_SHORT).show();
+//						isSetting = false;
+//					}
+//				}
+				MainActivity.this.finish();
 			}
 		});
-		btn_no.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				timer = 0;
-				mHandler.sendEmptyMessageDelayed(handler, 5000);
-				mDialog.dismiss();
-			}
-		});
-		btn_input.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				String inputString = btn_input.getText().toString();
-				btn_input.setText(inputString + "*");
-			}
-		});
+//		btn_no.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				timer = 0;
+//				mHandler.sendEmptyMessageDelayed(handler, 5000);
+//				mDialog.dismiss();
+//			}
+//		});
+//		btn_input.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				String inputString = btn_input.getText().toString();
+//				btn_input.setText(inputString + "*");
+//			}
+//		});
 		mDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
 			@Override
 			public boolean onKey(DialogInterface dialog, int keyCode,
 					KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_BACK
 						&& event.getAction() == KeyEvent.ACTION_DOWN) {
-					String inputString = btn_input.getText().toString();
-					btn_input.setText(inputString.substring(0,
-							inputString.length() - 1));
+//					String inputString = btn_input.getText().toString();
+//					btn_input.setText(inputString.substring(0,
+//							inputString.length() - 1));
 					return true;
 				} else {
-					return false; // Ĭ�Ϸ��� false
+					return false; // 默认返回 false
 				}
 			}
 		});
-		btn_input.requestFocus();
-		mDialog.show();// ȥ����ɫ����
+//		btn_input.requestFocus();
+		mDialog.show();// 去除黑色背景
 		try {
 			ViewGroup viewGroup1 = (ViewGroup) view.getParent();
 			if (viewGroup1 != null) {
@@ -341,7 +349,7 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * * 删除方法 这里只会删除某个文件夹下的文件，如果传入的directory是个文件，将不做处理 * *
+	 * *删除方法 这里只会删除某个文件夹下的文件，如果传入的directory是个文件，将不做处理  * *
 	 * 
 	 * @param directory
 	 * */
@@ -362,7 +370,7 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * * ����ⲿcache�µ�����(/mnt/sdcard/android/data/com.xxx.xxx/cache) * *
+	 * * 清除外部cache下的内容(/mnt/sdcard/android/data/com.xxx.xxx/cache) * *
 	 * 
 	 * @param context
 	 */
@@ -394,7 +402,7 @@ public class MainActivity extends Activity {
 			mHandler.sendEmptyMessageDelayed(handler, 5000);
 		}
 		/*
-		 * home���㲥
+		 * home键广播
 		 * */
 		homeKeyEventReceiver = new HomeKeyEventBroadCastReceiver();  
 	     registerReceiver(homeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)); 
@@ -410,7 +418,7 @@ public class MainActivity extends Activity {
 	public void onDestroy() {
 		mBrowser.destroy();
 		/*
-		 * ֹͣHOME �㲥����
+		 * ͣ停止HOME 广播接受
 		 * */
 		unregisterReceiver(homeKeyEventReceiver); 
 		super.onDestroy();
@@ -429,11 +437,21 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Log.e("键值ֵ", "" + keyCode+"event:"+event.getKeyCode());
+		Log.e("键值", "" + keyCode+"event:"+event.getKeyCode());
 		// TODO Auto-generated method stub
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-
+			
+//			 if (keyCode == KeyEvent.KEYCODE_BACK && mBrowser.canGoBack()) {  
+//			        // 返回上一页面
+//				 mBrowser.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  
+//				 mBrowser.goBack();  
+//			        return true;  
+//			    }  
+//			
+			if(ShutDown){
+				finish();
+			}
 //			Log.d(TAG, "onKeyDown KEYCODE_BACK");
 			return false;
 		case KeyEvent.KEYCODE_HOME:
@@ -441,13 +459,13 @@ public class MainActivity extends Activity {
 //			 android.os.Process.killProcess(android.os.Process.myPid());
 				 break;
 				 /*
-				  * ��ϵͳpower��ͻ ������Ч
+				  * 和系统power冲突 导致无效
 				  * */
 //		case KeyEvent.KEYCODE_POWER:
 //			try {
 //				/*
-//				 * reboot ���� 
-//				 * shutdown �ػ�
+//				 * reboot 重启
+//				 * shutdown 关机
 //				 * */
 //				Runtime.getRuntime().exec("su -c \"/system/bin/shutdown\"");
 //				ShutDown = true;
@@ -486,7 +504,7 @@ public class MainActivity extends Activity {
 	}
 	
 	/*
-	 * HOME �Ĺ㲥
+	 * HOME 的广播
 	 * */
 	private HomeKeyEventBroadCastReceiver homeKeyEventReceiver; 
 	public class HomeKeyEventBroadCastReceiver extends BroadcastReceiver{  
@@ -495,11 +513,12 @@ public class MainActivity extends Activity {
 	        //do what you want  
 	    	Log.e("home","HOME");
 	    	mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_HOMEPAGE);
+	    	finish();
 	    }  
 	} 
 	
 	/**
-	 * ˫����������
+	 * 双击输入密码
 	 */
 
 	private List<Integer> mlist = new ArrayList<Integer>();
@@ -512,15 +531,15 @@ public class MainActivity extends Activity {
 	private void By2Click() {
 		Timer tExit = null;
 		if (isExit == false) {
-			isExit = true; // ׼���˳�
+			isExit = true; // 准备退出
 			tExit = new Timer();
 			tExit.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					isExit = false; // ȡ���˳�
+					isExit = false; // 取消退出
 					mlist.clear();
 				}
-			}, 5000); // ���5������û�а��·��ؼ�����������ʱ��ȡ�����ղ�ִ�е�����
+			}, 5000); // 如果5秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
 
 		} else {
 			if (mlist.size() > 8) {
@@ -600,16 +619,6 @@ public class MainActivity extends Activity {
 						&& mlist.get(6) == KeyEvent.KEYCODE_5 && mlist.get(8) == KeyEvent.KEYCODE_5){
 					Intent intent = mContext.getPackageManager().getLaunchIntentForPackage("com.android.settings");
 					mContext.startActivity(intent);
-				}
-				else if(mlist.get(2) == KeyEvent.KEYCODE_1 && mlist.get(4) == KeyEvent.KEYCODE_2  //5555
-						&& mlist.get(6) == KeyEvent.KEYCODE_3 && mlist.get(8) == KeyEvent.KEYCODE_4){
-					Intent intent = new Intent();
-					 ComponentName localComponentName = new
-					 ComponentName("com.hisu.dvbplayer",
-					 "com.hisu.dvbplayer.DVBPlayerActivity");
-					 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					 intent.setComponent(localComponentName);
-					 getApplication().startActivity(intent);
 				}
 			}
 			mlist.clear();

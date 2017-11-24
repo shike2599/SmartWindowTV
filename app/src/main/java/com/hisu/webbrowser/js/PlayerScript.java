@@ -146,8 +146,8 @@ public class PlayerScript {
 	private AudioManager getAudioManage(){
 		if(mAudioManage==null){
 			mAudioManage = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
-			mMaxVolume = mAudioManage.getStreamMaxVolume(AudioManager.STREAM_MUSIC);  //��ȡϵͳ������� 
-			int curr = mAudioManage.getStreamVolume(AudioManager.STREAM_MUSIC);//��ȡ��ǰ����
+			mMaxVolume = mAudioManage.getStreamMaxVolume(AudioManager.STREAM_MUSIC);  //获取系统最大音量
+			int curr = mAudioManage.getStreamVolume(AudioManager.STREAM_MUSIC);//获取当前音量
 			mCurrentVolume = curr*100/mMaxVolume;
 		}
 		return mAudioManage;
@@ -155,7 +155,7 @@ public class PlayerScript {
 	@JavascriptInterface
 	public int getVolume(){
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called.");
-		int curr = getAudioManage().getStreamVolume(AudioManager.STREAM_MUSIC);//��ȡ��ǰ����
+		int curr = getAudioManage().getStreamVolume(AudioManager.STREAM_MUSIC);//获取当前音量
 		if(mCurrentVolume*mMaxVolume/100!=curr){
 			mCurrentVolume = curr*100/mMaxVolume;
 		}

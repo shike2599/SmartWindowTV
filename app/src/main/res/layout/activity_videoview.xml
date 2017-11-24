@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+     >
 
     <VideoView
         android:id="@+id/viedoview"
@@ -10,5 +10,30 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         />
+    
+    <FrameLayout 
+	    android:id="@+id/dialog1"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:background="#00000000"
+        android:orientation="horizontal"
+        android:padding="0dip"
+        android:visibility="visible" 
+	    >
+        
+	  <ProgressBar
+                android:id="@+id/progressBar1"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+	  <TextView 
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:text="加载中....."
+	      android:layout_gravity="bottom|center_horizontal"
+	      />
+	    
+	</FrameLayout>
 
-</LinearLayout>
+</RelativeLayout>

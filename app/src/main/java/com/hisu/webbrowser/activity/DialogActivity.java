@@ -1,17 +1,16 @@
 package com.hisu.webbrowser.activity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
+
 import com.hisu.webbrowser.MainActivity;
 import com.hisu.webbrowser.R;
 import com.hisu.webbrowser.js.SystemScript;
 import com.hisu.webbrowser.util.BrowserUtil;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Toast;
 
 public class DialogActivity extends Activity implements OnClickListener{
 	

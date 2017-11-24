@@ -3,43 +3,27 @@ package com.hisu.webbrowser.activity;
 import java.lang.ref.WeakReference;
 
 
-import com.hisu.webbrowser.R;
-import com.hisu.webbrowser.libvlc.EventHandler;
-import com.hisu.webbrowser.player.VideoVLC;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.hisu.webbrowser.R;
+import com.hisu.webbrowser.libvlc.EventHandler;
+import com.hisu.webbrowser.player.VideoVLC;
 
 @SuppressLint("InlinedApi")
 public class VideoVLCActivity extends Activity {

@@ -1,26 +1,26 @@
 package com.hisu.webbrowser.mode;
 
 public class CacheVideo{
-	
+
 	/**
-	 * ��Ƶ���
+	 * 视频编号
 	 */
 	private int id;
-	
+
 	/**
-	 * �Ƶ���
+	 * 酒店编号
 	 */
 	private int hotelId;
 	/**
-	 * ��Ƶ�ļ���
+	 * 视频文件名
 	 */
 	private String name;
 	/**
-	 * ��Ƶ����·��
+	 * 视频下载路径
 	 */
 	private String url;
 	/**
-	 * ��Ƶ���ش��·��
+	 * 视频本地存放路径
 	 */
 	private String savePath;
 	

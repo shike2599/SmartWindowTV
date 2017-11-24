@@ -2,26 +2,18 @@ package com.hisu.webbrowser.manager;
 
 import java.io.File;
 import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.hisu.webbrowser.mode.Constants;
-import com.hisu.webbrowser.mode.WebInterface;
-import com.hisu.webbrowser.util.HttpRequestUtil;
-import com.lidroid.xutils.HttpUtils;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.hisu.webbrowser.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -36,89 +28,99 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.hisu.webbrowser.R;
+import com.hisu.webbrowser.mode.Constants;
+import com.hisu.webbrowser.mode.WebInterface;
+import com.hisu.webbrowser.util.HttpRequestUtil;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+
 public class UpdateManager {
-	// ������...
+	// 下载中...
 	private static final int DOWNLOAD = 1;
-	// �������
+	// 下载完成
 	private static final int DOWNLOAD_FINISH = 2;
-	// ���°汾...
+	// 有新版本...
 	private static final int HAS_NEW_VERSION = 3;
-	// û���°汾...
+	// 没有新版本...
 	private static final int HAS_NOT_NEW_VERSION = 4;
-	// ����ʧ��.
+	// 下载失败.
 	private static final int DOWNLOAD_FAILED = 5;
 
 	private static final int CHECK_VERSION = 6;
 	private JSONObject mVersion;
-	// ���ر���·��
+	// 下载保存路径
 	private String mSavePath;
-	// ��¼����������
+	// 记录进度条数量
 	private int progress;
-	// �Ƿ�ȡ������
+	// 是否取消更新
 	private boolean cancelUpdate = false;
-	// �����Ķ���
+	// 上下文对象
 	private Context mContext;
-	// ������
+	// 进度条
 	private ProgressBar mProgressBar;
-	// ���½������ĶԻ���
+	// 更新进度条的对话框
 	private Dialog mDownloadDialog;
 
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-			// �����С�����
-			case DOWNLOAD:
-				// ���½�����
-				System.out.println(progress);
-				mProgressBar.setProgress(progress);
-				break;
-			// �������
-			case DOWNLOAD_FINISH:
-				// ��װ�ļ�
-				try {
+				// 下载中。。。
+				case DOWNLOAD:
+					// 更新进度条
+					System.out.println(progress);
+					mProgressBar.setProgress(progress);
+					break;
+				// 下载完成
+				case DOWNLOAD_FINISH:
+					// 安装文件
+					try {
+						mDownloadDialog.dismiss();
+						installApk();
+					} catch (JSONException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					break;
+				// 提示更新
+				case HAS_NEW_VERSION:
+					showDownloadDialog();
+					break;
+				// 没有新版本
+				case HAS_NOT_NEW_VERSION:
+//				Toast.makeText(
+//						mContext,
+//						mContext.getString(R.string.soft_update_no)
+//								+ mVersionName, Toast.LENGTH_SHORT).show();
+					break;
+				// 下载失败
+				case DOWNLOAD_FAILED:
 					mDownloadDialog.dismiss();
-					installApk();
-				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				break;
-			// ��ʾ����
-			case HAS_NEW_VERSION:
-				showDownloadDialog();
-				break;
-			// û���°汾
-			case HAS_NOT_NEW_VERSION:
-				Toast.makeText(
-						mContext,
-						mContext.getString(R.string.soft_update_no)
-								+ mVersionName, Toast.LENGTH_SHORT).show();
-				break;
-			// ����ʧ��
-			case DOWNLOAD_FAILED:
-				mDownloadDialog.dismiss();
-				Toast.makeText(mContext, R.string.soft_download_failed,
-						Toast.LENGTH_SHORT).show();
-				break;
-			case CHECK_VERSION:
-				JSONObject obj = (JSONObject) msg.obj;
-				
-				Log.e("APP",obj.toString());
-				try {
-					if (obj.has("versionInfo")) {
-						mVersion = obj.getJSONObject("versionInfo");
-						mVersion.put("name", Constants.APP_FLAG + ".apk");
-						mHandler.sendEmptyMessage(HAS_NEW_VERSION);
-						break;
+					Toast.makeText(mContext, R.string.soft_download_failed,
+							Toast.LENGTH_SHORT).show();
+					break;
+				case CHECK_VERSION:
+					JSONObject obj = (JSONObject) msg.obj;
+
+					Log.e("APP",obj.toString());
+					try {
+						if (obj.has("versionInfo")) {
+							mVersion = obj.getJSONObject("versionInfo");
+							mVersion.put("name", Constants.APP_FLAG + ".apk");
+							mHandler.sendEmptyMessage(HAS_NEW_VERSION);
+							break;
+						}
+
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				mHandler.sendEmptyMessage(HAS_NOT_NEW_VERSION);
-				break;
+					mHandler.sendEmptyMessage(HAS_NOT_NEW_VERSION);
+					break;
 			}
 		};
 	};
@@ -138,7 +140,7 @@ public class UpdateManager {
 	}
 
 	/**
-	 * ����������
+	 * 检测软件更新
 	 */
 	public void checkUpdate() {
 		String url = WebInterface.URL_APP_VERSION();
@@ -158,13 +160,13 @@ public class UpdateManager {
 
 	private void showNoticeDialog(boolean isDownload) {
 		// TODO Auto-generated method stub
-		// ����Ի���
-		Builder builder = new Builder(mContext);
+		// 构造对话框
+		AlertDialog.Builder builder = new Builder(mContext);
 		builder.setTitle(isDownload ? R.string.app_download_title
 				: R.string.soft_update_title);
 		builder.setMessage(isDownload ? R.string.app_download_info
 				: R.string.soft_update_info);
-		// ����
+		// 更新
 		builder.setPositiveButton(isDownload ? R.string.app_download_updatebtn
 				: R.string.soft_update_updatebtn, new OnClickListener() {
 
@@ -172,11 +174,11 @@ public class UpdateManager {
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				dialog.dismiss();
-				// ��ʾ���ضԻ���
+				// 显示下载对话框
 				showDownloadDialog();
 			}
 		});
-		// �Ժ����
+		// 稍后更新
 		builder.setNegativeButton(isDownload ? R.string.soft_update_cancel
 				: R.string.soft_update_later, new OnClickListener() {
 
@@ -191,10 +193,10 @@ public class UpdateManager {
 	}
 
 	private void showDownloadDialog() {
-		// ����������ضԻ���
-		Builder builder = new Builder(mContext);
+		// 构造软件下载对话框
+		AlertDialog.Builder builder = new Builder(mContext);
 		builder.setTitle(R.string.soft_updating);
-		// �����ضԻ������ӽ�����
+		// 给下载对话框增加进度条
 		final LayoutInflater inflater = LayoutInflater.from(mContext);
 		View view = inflater.inflate(R.layout.softupdate_progress, null);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.update_progress);
@@ -203,14 +205,14 @@ public class UpdateManager {
 		/*
 		 * builder.setNegativeButton(R.string.soft_update_cancel, new
 		 * OnClickListener() {
-		 * 
+		 *
 		 * @Override public void onClick(DialogInterface dialog, int which) { //
-		 * TODO Auto-generated method stub dialog.dismiss(); // ����ȡ��״̬
+		 * TODO Auto-generated method stub dialog.dismiss(); // 设置取消状态
 		 * cancelUpdate = true; } });
 		 */
 		mDownloadDialog = builder.create();
 		mDownloadDialog.show();
-		// �����ļ�
+		// 下载文件
 		try {
 			downloadApk();
 		} catch (JSONException e) {
@@ -232,13 +234,13 @@ public class UpdateManager {
 	}
 
 	/**
-	 * ����APK�ļ�
-	 * 
+	 * 下载APK文件
+	 *
 	 * @throws JSONException
 	 */
 	private void downloadApk() throws JSONException {
 		// TODO Auto-generated method stub
-		// �������߳��������
+		// 启动新线程下载软件
 		// new DownloadApkThread().start();
 
 		if (!Environment.getExternalStorageState().equals(
@@ -247,7 +249,7 @@ public class UpdateManager {
 			mHandler.sendEmptyMessage(DOWNLOAD_FAILED);
 			return;
 		}
-		// ��ȡSDCard��·��
+		// 获取SDCard的路径
 		String sdpath = Environment.getExternalStorageDirectory().getPath() + "/";
 		mSavePath = sdpath + "download";
 		String filePath = mSavePath + "/" + mVersion.getString("name");
@@ -270,7 +272,7 @@ public class UpdateManager {
 
 					@Override
 					public void onLoading(long total, long current,
-							boolean isUploading) {
+										  boolean isUploading) {
 						// testTextView.setText(current + "/" + total);
 						progress = (int) (((float) current / total) * 100);
 						mHandler.sendEmptyMessage(DOWNLOAD);
@@ -295,8 +297,8 @@ public class UpdateManager {
 	}
 
 	/**
-	 * ��ȡ����汾��
-	 * 
+	 * 获取软件版本号
+	 *
 	 * @param context
 	 * @return
 	 */
@@ -304,7 +306,7 @@ public class UpdateManager {
 		// TODO Auto-generated method stub
 		int versionCode = 0;
 
-		// ��ȡ����汾�ţ���ӦAndroidManifest.xml��android:versionCode
+		// 获取软件版本号，对应AndroidManifest.xml下android:versionCode
 		try {
 			PackageInfo packageInfo = mContext.getPackageManager()
 					.getPackageInfo(mContext.getPackageName(), 0);
@@ -318,10 +320,10 @@ public class UpdateManager {
 	}
 
 	/**
-	 * ��װAPK�ļ�
+	 * 安装APK文件
 	 * @throws JSONException
 	 */
-	
+
 	private void installApk() throws JSONException {
 		File apkfile = new File(mSavePath, mVersion.getString("name"));
 		if (!apkfile.exists()) {

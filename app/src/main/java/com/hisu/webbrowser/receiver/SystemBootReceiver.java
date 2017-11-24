@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.hisu.webbrowser.MainActivity;
 
 public class SystemBootReceiver extends BroadcastReceiver {
-	/* Ҫ���յ�intentԴ */
+	/* 要接收的intent源 */
 	private final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
 
 	@Override
@@ -35,11 +35,11 @@ public class SystemBootReceiver extends BroadcastReceiver {
 	}
 	/**
 	 * 用来判断服务是否运行.
-	 * 
+	 *
 	 * @param context
 	 * @param className
-	 *            �жϵķ�������
-	 * @return true ������ false ��������
+	 *            判断的服务名字
+	 * @return true 在运行 false 不在运行
 	 */
 	public boolean isServiceRunning(Context mContext, String className) {
 		boolean isRunning = false;

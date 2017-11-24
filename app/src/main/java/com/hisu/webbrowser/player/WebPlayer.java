@@ -81,6 +81,7 @@ public class WebPlayer {
 	};
 	
 	private void start() {
+		Log.d(TAG," "+ CommonFunction._FUNC_()+" called. mState = "+stateStr(mState));
 		//mSurfaceView.setZOrderOnTop(false);
 		if (mMediaPlayer != null) {
 			mMediaPlayer.reset();
@@ -116,6 +117,7 @@ public class WebPlayer {
 	 * @param flag clear last frame if flag is 0 , otherwise keep the last frame
 	 */
 	public void stop(int flag) {
+		Log.d(TAG," "+CommonFunction._FUNC_()+" called. mState = "+stateStr(mState)+",flag="+flag);
 		if (mMediaPlayer != null) {
 			mMediaPlayer.reset();
 			mMediaPlayer.release();
@@ -133,8 +135,9 @@ public class WebPlayer {
 					canvas = mSurfaceHolder.lockCanvas(rect);
 					if(canvas!=null){
 						canvas.drawColor(Color.BLACK);
+						Log.d(TAG," "+CommonFunction._FUNC_()+" clear frame");
 					}else{
-						Log.d(TAG," "+ CommonFunction._FUNC_()+" canvas is null!!!!");
+						Log.d(TAG," "+CommonFunction._FUNC_()+" canvas is null!!!!");
 					}
 				}
 			} catch (Exception e) {

@@ -1,14 +1,30 @@
 package com.hisu.webbrowser;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebSettings.RenderPriority;
+import android.webkit.WebStorage;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hisu.webbrowser.R;
-import com.hisu.webbrowser.activity.DialogActivity;
 import com.hisu.webbrowser.activity.HisuDialogActivity;
 import com.hisu.webbrowser.js.PlayerScript;
 import com.hisu.webbrowser.js.SystemScript;
@@ -17,43 +33,6 @@ import com.hisu.webbrowser.player.WebPlayer;
 import com.hisu.webbrowser.util.BrowserEvent;
 import com.hisu.webbrowser.util.BrowserMessage;
 import com.hisu.webbrowser.util.BrowserUtil;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.app.AlertDialog.Builder;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.RequiresApi;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.WebSettings;
-import android.webkit.WebSettings.LayoutAlgorithm;
-import android.webkit.WebSettings.RenderPriority;
-import android.webkit.WebChromeClient;
-import android.webkit.WebStorage;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 public class WebBrowser {
 
@@ -65,7 +44,6 @@ public class WebBrowser {
 	private ImageView mimage;
 	private Activity ac;
 
-	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	@SuppressLint("JavascriptInterface")
 	public WebBrowser(WebView webview, Context context, WebPlayer player,
 			ImageView image, final Activity ac) {
@@ -80,7 +58,7 @@ public class WebBrowser {
 
 		mWebView.setBackgroundColor(Color.TRANSPARENT);
 		mWebView.getBackground().setAlpha(0);
-		// mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+//		 mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
 
 		// Log.d("SWWebBrowser","mWebView.getLayerType() = "+mWebView.getLayerType());
 
@@ -88,13 +66,13 @@ public class WebBrowser {
 
 		mWebView.setInitialScale(100);
 		WebSettings webSettings = mWebView.getSettings();
-		// ����javaScript�ű�
+		// 开启javaScript脚本
 		webSettings.setJavaScriptEnabled(true);
 
-		// ����localStorage �� sessionStorage
+		// 启用localStorage 和 sessionStorage
 		webSettings.setDomStorageEnabled(true);
 
-		// ����Ӧ�ó��򻺴�
+		// 开启应用程序缓存
 		webSettings.setAppCacheEnabled(true);
 		if (BrowserUtil.isNetworkConnected(mContext)) {
 
@@ -104,35 +82,39 @@ public class WebBrowser {
 					.setCacheMode(mWebView.getSettings().LOAD_CACHE_ELSE_NETWORK);
 		}
 
-		webSettings.setAppCacheMaxSize(1024 * 1024 * 8);// ���û����С�����������8M
+		webSettings.setAppCacheMaxSize(1024 * 1024 * 8);// 设置缓冲大小，这里设的是8M
 		String appCacheDir = context.getDir("cache", Context.MODE_PRIVATE)
 				.getPath();
 		webSettings.setAppCachePath(appCacheDir);
 		webSettings.setAllowFileAccess(true);
 
-		// ����webDatabase���ݿ�
+		// 启用webDatabase数据库
 		String databaseDir = context.getDir("database", Context.MODE_PRIVATE)
 				.getPath();
 		webSettings.setDatabaseEnabled(true);
 		webSettings.setDatabasePath(databaseDir);
-		// ���õ���λ
+		// 启用地理定位
 		webSettings.setGeolocationEnabled(true);
-		// ���ö�λ�����ݿ�·��
+		// 设置定位的数据库路径
 		webSettings.setGeolocationDatabasePath(databaseDir);
 
-		// �����������flash��֧�֣�
+		// 开启插件（对flash的支持）
 		// webSettings.setPluginsEnabled(true);
 		webSettings.setRenderPriority(RenderPriority.HIGH);
 		webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-		webSettings.setAllowUniversalAccessFromFileURLs(true);//����(����������Ҳ�����ô���   �籨�����������д����ɾ��)
 
 		webSettings.setBuiltInZoomControls(true);
 
-		// ����ͼƬ��Ⱦ
+		// 设置图片渲染
 		webSettings.setRenderPriority(RenderPriority.HIGH);
 		webSettings.setBlockNetworkImage(true);
 		webSettings.setLoadsImagesAutomatically(true);
-		// ����webView��userAgent
+
+//		/*屏幕款*/
+//		webSettings.setUseWideViewPort(true);
+//		//限制宽
+//		webSettings.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+		// 重设webView的userAgent
 		webSettings.setUserAgentString(mContext
 				.getString(R.string.webview_useragent));
 
@@ -209,12 +191,12 @@ public class WebBrowser {
 
 					Toast.makeText(mContext, "网络异常，请检查网络", Toast.LENGTH_LONG)
 							.show();
-					ac.startActivity(new Intent(ac, DialogActivity.class));
+//					ac.startActivity(new Intent(ac, DialogActivity.class));
 					ac.finish();
 
 				} else {
 					Toast.makeText(mContext, "网络异常，请检查网络", Toast.LENGTH_LONG)//10.10.7.150:8081
-					.show();
+							.show();
 					ac.startActivity(new Intent(ac, HisuDialogActivity.class));
 					ac.finish();
 				}
@@ -263,11 +245,11 @@ public class WebBrowser {
 	}
 
 	/**
-	 * ���WebView����
+	 * 清除WebView缓存
 	 */
 	public void clearWebViewCache() {
 
-		// ����Webview�������ݿ�
+		// 清理Webview缓存数据库
 		try {
 			mContext.deleteDatabase("webview.db");
 			mContext.deleteDatabase("webviewCache.db");
@@ -275,7 +257,7 @@ public class WebBrowser {
 			e.printStackTrace();
 		}
 
-		// WebView �����ļ�
+		// WebView 缓存文件
 		File appCacheDir = new File(mContext.getDir("cache",
 				Context.MODE_PRIVATE).getPath());
 		Log.e(TAG, "appCacheDir path=" + appCacheDir.getAbsolutePath());
@@ -284,11 +266,11 @@ public class WebBrowser {
 				Context.MODE_PRIVATE).getPath());
 		Log.e(TAG, "webviewCacheDir path=" + webviewCacheDir.getAbsolutePath());
 
-		// ɾ��webview ����Ŀ¼
+		// 删除webview 缓存目录
 		if (webviewCacheDir.exists()) {
 			deleteFile(webviewCacheDir);
 		}
-		// ɾ��webview ���� ����Ŀ¼
+		// 删除webview 缓存 缓存目录
 		if (appCacheDir.exists()) {
 			deleteFile(appCacheDir);
 		}
@@ -306,8 +288,8 @@ public class WebBrowser {
 	}
 
 	/**
-	 * �ݹ�ɾ�� �ļ�/�ļ���
-	 * 
+	 * 递归删除 文件/文件夹
+	 *
 	 * @param file
 	 */
 	public void deleteFile(File file) {
@@ -350,24 +332,24 @@ public class WebBrowser {
 			super.onProgressChanged(view, newProgress);
 		}
 
-		// ���仺�������
+		// 扩充缓存的容量
 		@Override
 		public void onReachedMaxAppCacheSize(long spaceNeeded,
-				long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater) {
+											 long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater) {
 			quotaUpdater.updateQuota(spaceNeeded * 2);
 		}
 
-		// �������ݿ����������WebChromeClinet��ʵ�֣�
+		// 扩充数据库的容量（在WebChromeClinet中实现）
 		@Override
 		public void onExceededDatabaseQuota(String url,
-				String databaseIdentifier, long currentQuota,
-				long estimatedSize, long totalUsedQuota,
-				WebStorage.QuotaUpdater quotaUpdater) {
+											String databaseIdentifier, long currentQuota,
+											long estimatedSize, long totalUsedQuota,
+											WebStorage.QuotaUpdater quotaUpdater) {
 
 			quotaUpdater.updateQuota(estimatedSize * 2);
 		}
 
-		// Android ʹWebView֧��HTML5 Video��ȫ�������ŵķ���
+		// Android 使WebView支持HTML5 Video（全屏）播放的方法
 		/*
 		 * @Override public void onShowCustomView(View view, CustomViewCallback
 		 * callback) { if (myCallback != null) {
@@ -399,7 +381,7 @@ public class WebBrowser {
 	}
 
 	public void loadUrl(String url) {
-		// Toast.makeText(ac, "���ı������"+url,3000).show();
+//		 Toast.makeText(ac, "���ı������"+url,3000).show();
 		mWebView.loadUrl(url);
 		mWebView.requestFocus();
 	}
@@ -415,10 +397,13 @@ public class WebBrowser {
 	public void goBack() {
 		mWebView.goBack();
 	}
+	public WebSettings getSettings() {
+		return mWebView.getSettings();
+	}
 
 	
 	/*
-	 * ��ֵ����ǰ��
+	 * 键值发给前端
 	 * */
 	public void notifyEvent(int evnetCode) {
 		/*
@@ -446,7 +431,7 @@ public class WebBrowser {
 							+ prog + "%");
 					break;
 				case BrowserMessage.SW_MEDIA_CMD_PLAY:
-					// getProgressDialog("���ڼ���ӰƬ�����Ժ򡭡�").show();
+					// getProgressDialog("正在加载影片，请稍候……").show();
 					param = msg.getData().getString("URL");
 					// mWebView.setVisibility(View.GONE);
 					mWebPlayer.start(param);
@@ -524,9 +509,9 @@ public class WebBrowser {
 			mProgressDialog.setCancelable(false);
 			mProgressDialog.setCanceledOnTouchOutside(false);
 			mProgressDialog.setIndeterminate(true);
-			mProgressDialog.setTitle("��ʾ");
+			mProgressDialog.setTitle("提示");
 			if (message == null)
-				message = "�����������ݣ����Ժ򡣡���";
+				message = "正在请求数据，请稍候。。。";
 			mProgressDialog.setMessage(message);
 		} else if (message != null) {
 			mProgressDialog.setMessage(message);

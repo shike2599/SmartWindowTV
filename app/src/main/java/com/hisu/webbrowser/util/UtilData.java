@@ -28,27 +28,27 @@ public class UtilData {
 	public static String surl;
 
 	/*
-	 * ��ҳLOGO
+	 * 首页LOGO
 	 */
 	public static String Logo1 = "";
 	public static String Logo2 = "";
 
 	/*
-	 * �󶨾Ƶ��ID
+	 * 绑定酒店的ID
 	 */
 	public static String IP = "";
 	public static String hotelId = "";
 
 	/*
-	 * ģ�� ���� ѡ�� �ֻ���ΪPHONE��win8 Ϊ WINDOWS
+	 * 模版 子项 选择 手机端为PHONE，win8 为 WINDOWS
 	 */
 	public static String UImodel = "WINDOWS";
 
-	// ���㿪ʼ ���� 45678 5�п�ѡ
+	// 从零开始 现有 45678 5中可选
 	public static String UI_model_item = "0,1,2,3,4,5,6,7";
 
 	/*
-	 * ͨ��ping�ٶ��ж������Ƿ�����
+	 * 通过ping百度判断网络是否正常
 	 * */
 	public static final boolean ping() {
 
@@ -56,11 +56,11 @@ public class UtilData {
 
 		try {
 
-			String ip = "www.baidu.com";// ���ǰٶȹ��ˣ����������Ӧ��û����~
+			String ip = "www.baidu.com";// 除非百度挂了，否则用这个应该没问题~
 
-			Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping3��
+			Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping3次
 
-			// ��ȡping�����ݣ��ɲ��ӡ�
+			// 读取ping的内容，可不加。
 
 			InputStream input = p.getInputStream();
 
@@ -78,7 +78,7 @@ public class UtilData {
 
 			Log.i("TTT", "result content : " + stringBuffer.toString());
 
-			// PING��״̬
+			// PING的状态
 
 			int status = p.waitFor();
 
@@ -113,30 +113,30 @@ public class UtilData {
 	}
 
 	/**
-	 * ��ȡ��ǰʱ��
-	 * 
-	 * @return ʱ���ַ��� 24Сʱ��
+	 * 获取当前时间
+	 *
+	 * @return 时间字符串 24小时制
 	 * @author drowtram
 	 */
 	public static String getStringTime(String type) {
 		Time t = new Time();
-		t.setToNow(); // ȡ��ϵͳʱ�䡣
-		String hour = t.hour < 10 ? "0" + (t.hour) : t.hour + ""; // Ĭ��24Сʱ��
+		t.setToNow(); // 取得系统时间。
+		String hour = t.hour < 10 ? "0" + (t.hour) : t.hour + ""; // 默认24小时制
 		String minute = t.minute < 10 ? "0" + (t.minute) : t.minute + "";
 		return hour + type + minute;
 	}
 
 	/**
 	 * 获取当前日期，包含星期几
-	 * 
-	 * @return �����ַ��� xx��xx�� ����x
+	 *
+	 * @return 日期字符串 xx月xx号 星期x
 	 * @author drowtram
 	 */
 	public static String getStringData() {
 		final Calendar c = Calendar.getInstance();
 		c.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
-		String mMonth = String.valueOf(c.get(Calendar.MONTH) + 1);// ��ȡ��ǰ�·�
-		String mDay = String.valueOf(c.get(Calendar.DAY_OF_MONTH));// ��ȡ��ǰ�·ݵ����ں���
+		String mMonth = String.valueOf(c.get(Calendar.MONTH) + 1);// 获取当前月份
+		String mDay = String.valueOf(c.get(Calendar.DAY_OF_MONTH));// 获取当前月份的日期号码
 		String mWay = String.valueOf(c.get(Calendar.DAY_OF_WEEK));
 		if ("1".equals(mWay)) {
 			mWay = "日";
@@ -153,7 +153,7 @@ public class UtilData {
 		} else if ("7".equals(mWay)) {
 			mWay = "六";
 		}
-		return mMonth + "��" + mDay + "��\n" + "����" + mWay;
+		return mMonth + "月" + mDay + "日\n" + "星期" + mWay;
 	}
 
 	public static String getIpUrl = "http://www.cz88.net/ip/viewip778.aspx";

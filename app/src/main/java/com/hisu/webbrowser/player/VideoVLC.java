@@ -135,19 +135,19 @@ public class VideoVLC {
             libvlc = LibVLC.getInstance();
             libvlc.setHardwareAcceleration(2);//�����ʽ -1 ~  2 ��  �ֱ��Ӧ�� �汾
             libvlc.setSubtitlesEncoding("");
-            libvlc.setAout(LibVLC.AOUT_AUDIOTRACK_JAVA);
+//            libvlc.setAout(LibVLC.AOUT_AUDIOTRACK_JAVA);
             libvlc.setTimeStretching(false);
             libvlc.setChroma("RV32");
             libvlc.setVerboseMode(true);
             
 //            libvlc.setSubtitlesEncoding("");
 //            libvlc.setTimeStretching(false);
-//            libvlc.setFrameSkip(true);
+            libvlc.setFrameSkip(true);
 //            libvlc.setChroma("RV32");
 //            libvlc.setVerboseMode(true);
-//            libvlc.setAout(-1);
-//            libvlc.setDeblocking(4);
-//            libvlc.setNetworkCaching(0);
+            libvlc.setAout(-1);
+            libvlc.setDeblocking(4);
+            libvlc.setNetworkCaching(1500);
             
             libvlc.restart(mContext);
             EventHandler.getInstance().addHandler(mHandler);

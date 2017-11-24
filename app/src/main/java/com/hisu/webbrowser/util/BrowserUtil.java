@@ -21,7 +21,7 @@ public class BrowserUtil {
 
 	
 	/*
-	 * �ж������Ƿ�����
+	 * 判断网络是否正常
 	 * 
 	 * */
 	public static boolean isNetworkConnected(Context context) {

@@ -2,12 +2,7 @@ package com.hisu.webbrowser.activity;
 
 import java.io.File;
 
-import com.hisu.webbrowser.R;
-import com.hisu.webbrowser.adapter.UpathAdapter;
-import com.hisu.webbrowser.util.DataUtil;
-
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +10,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+
+import com.hisu.webbrowser.R;
+import com.hisu.webbrowser.adapter.UpathAdapter;
+import com.hisu.webbrowser.util.DataUtil;
 
 public class UpathActivity extends Activity{
 	
