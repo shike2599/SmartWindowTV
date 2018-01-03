@@ -38,9 +38,9 @@ public class WebInterface {
 //	public static  String URL_PREFIX = "http://114.215.132.43:8809";//湖南社区
 //	public static  String URL_PREFIX = "http://114.215.132.43:8991";//湖南党建
 //	public static  String URL_PREFIX = "http://hotel.hisugj.com";
-	public static  String URL_PREFIX = "http://community.hisugj.com";
+//	public static  String URL_PREFIX = "http://community.hisugj.com";
 //	public static  String URL_PREFIX = "http://192.16..17.188:8809";
-//	public static  String URL_PREFIX = "http://10.248.1.155:8809";//十堰社区
+	public static  String URL_PREFIX = "http://10.248.1.155:8809";//十堰社区
 	/*
 	 * versionCode 10
 	 * */
