@@ -51,7 +51,9 @@ import com.hisu.webbrowser.util.ToolsUtil;
 	private Activity ac;
 	private static SharedPreferences sSp;
 	private List<Integer> preventDefaultKeyList = new ArrayList<Integer>();
-	public SystemScript(Handler handler, Context context,Activity ac) {
+	public static int LOAD_TYPE = -1;
+
+	  public SystemScript(Handler handler, Context context,Activity ac) {
 		// TODO Auto-generated constructor stub
 		mHandler = handler;
 		mContext = context;
@@ -260,8 +262,8 @@ import com.hisu.webbrowser.util.ToolsUtil;
        * */
 	  @JavascriptInterface
 	  public int ApkType(){
-
-		  return -1;
+		  Log.i(TAG, "load_type====>>>" + LOAD_TYPE);
+		  return LOAD_TYPE;
 	  }
 
 	  /*

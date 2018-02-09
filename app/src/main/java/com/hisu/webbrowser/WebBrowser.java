@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.hisu.webbrowser.R;
 import com.hisu.webbrowser.activity.HisuDialogActivity;
+import com.hisu.webbrowser.bean.PlayBean;
 import com.hisu.webbrowser.js.PlayerScript;
 import com.hisu.webbrowser.js.SystemScript;
 import com.hisu.webbrowser.mode.WebInterface;
@@ -43,7 +44,6 @@ public class WebBrowser {
 	private SystemScript mSystemScript;
 	private ImageView mimage;
 	private Activity ac;
-
 	@SuppressLint("JavascriptInterface")
 	public WebBrowser(WebView webview, Context context, WebPlayer player,
 			ImageView image, final Activity ac) {
@@ -436,15 +436,22 @@ public class WebBrowser {
 					// mWebView.setVisibility(View.GONE);
 					mWebPlayer.start(param);
 					break;
+					case BrowserMessage.SW_MEDIA_DVB_PLAY:
+						PlayBean playBean = (PlayBean) msg.obj;
+						mWebPlayer.playDvb(playBean.getUrl(), playBean.getX(),
+							playBean.getY(), playBean.getW(), playBean.getH());
+						break;
 				case BrowserMessage.SW_MEDIA_CMD_STOP:
 					int flag = msg.getData().getInt("flag");
 					mWebPlayer.stop(flag);
+					mWebPlayer.stopDvbPlay();
 					break;
 				case BrowserMessage.SW_MEDIA_CMD_PAUSE:
 					mWebPlayer.pause();
 					break;
 				case BrowserMessage.SW_MEDIA_CMD_RESUME:
 					mWebPlayer.resume();
+					mWebPlayer.dvbResume();
 					break;
 				case BrowserMessage.SW_MEDIA_CMD_SEEK:
 					int pos = msg.getData().getInt("pos");

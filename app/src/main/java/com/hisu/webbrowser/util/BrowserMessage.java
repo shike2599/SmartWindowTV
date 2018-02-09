@@ -14,7 +14,8 @@ public class BrowserMessage {
 	public static final int SW_MEDIA_CMD_SET_LOCATION = 6;
 	public static final int SW_CMD_PLAY_END = 7;
 	public static final int SW_CMD_PLAY_SUCCESS = 8;
-	
+	public static final int SW_MEDIA_DVB_PLAY = 0x3322;
+
 	public static final int SW_OPEN_APP = 9; 
 	public static final int SW_OPEN_URL = 10;
 	public static final int SW_TOAST = 11;

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
+import com.hisu.webbrowser.bean.PlayBean;
 import com.hisu.webbrowser.player.WebPlayer;
 import com.hisu.webbrowser.util.BrowserMessage;
 import com.hisu.webbrowser.util.CommonFunction;
@@ -45,18 +46,26 @@ public class PlayerScript {
 		if (null == mHandler) {
 			return -1;
 		}
-		Message msg = new Message();
-		msg.what = BrowserMessage.SW_MEDIA_CMD_PLAY;
-		msg.getData().putString("URL", url);
-		mHandler.sendMessage(msg);
-		
+
+		if ("http".startsWith(url)){
+			Message msg = new Message();
+			msg.what = BrowserMessage.SW_MEDIA_CMD_PLAY;
+			msg.getData().putString("URL", url);
+			mHandler.sendMessage(msg);
+		}else if ("channelId".startsWith(url)){
+			Message msg = new Message();
+			msg.what = BrowserMessage.SW_MEDIA_DVB_PLAY;
+			PlayBean playBean = new PlayBean(url, x, y, w, h);
+			msg.obj = playBean;
+			mHandler.sendMessage(msg);
+		}
 		setLocation(x,y,w,h);
 		return 0;
 	}
 	@JavascriptInterface
 	public int setLocation(int x,int y,int w,int h){
 		Log.d(TAG,"setLocation x ="+x+" y = "+y +" w="+w +" h= "+h);
-
+		resume();
 		if (null == mHandler) {
 			return -1;
 		}
@@ -72,6 +81,7 @@ public class PlayerScript {
 	@JavascriptInterface
 	public int pause(){
 		Log.d(TAG," "+ CommonFunction._FUNC_()+" called.");
+		Log.i(TAG, "======pause===");
 		if (null == mHandler) {
 			return -1;
 		}
@@ -82,6 +92,7 @@ public class PlayerScript {
 	@JavascriptInterface
 	public int resume(){
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called.");
+		Log.i(TAG, "======resume===");
 		if (null == mHandler) {
 			return -1;
 		}
@@ -105,12 +116,14 @@ public class PlayerScript {
 	}
 	@JavascriptInterface
 	public int stop(){
+		Log.i(TAG, "======stop()===");
 		return stop(null);
 	}
 	@JavascriptInterface
 	public int stop(String flag)
 	{
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called.");
+		Log.i(TAG, "======stop(String flag)===" + flag);
 		if (null == mHandler) {
 			return -1;
 		}

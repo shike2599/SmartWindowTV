@@ -1,6 +1,11 @@
 package com.hisu.webbrowser.player;
 
 
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
+import android.appwidget.TeeveeWidgetHost;
+import android.appwidget.TeeveeWidgetHostView;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -10,6 +15,7 @@ import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.net.telecast.NetworkManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -20,6 +26,8 @@ import android.view.View;
 //import android.widget.RelativeLayout.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
 
+import android.widget.RelativeLayout;
+import com.hisu.webbrowser.R;
 import com.hisu.webbrowser.util.BrowserMessage;
 import com.hisu.webbrowser.util.CommonFunction;
 
@@ -42,6 +50,18 @@ public class WebPlayer {
 	private int mState;
 	private String mUrl;
 	private boolean mSurfaceCreated = false;
+	private RelativeLayout mDvbPlayLayout;
+
+	private TeeveeWidgetHost mAppWidgetHost;
+	private AppWidgetManager mAppWidgetManager;
+	private NetworkManager mNetworkManager;
+	private AppWidgetProviderInfo mAppWidgetInfo;
+	private TeeveeWidgetHostView mHostView;
+
+	private int appWidgetId;
+	static final int APPWIDGET_HOST_ID = 0x100;
+	static final String ID = "284c19b9-39aa-45e4-9956-9e15aa6e9168";//陕西
+	private String mDvbUrl;
 
 	public WebPlayer( SurfaceView surfaceView, int width,
 			int height) {
@@ -59,6 +79,25 @@ public class WebPlayer {
 		mState = inited;
 	}
 
+	private Context mContext;
+	public WebPlayer(Context context, SurfaceView surfaceView, RelativeLayout relativeLayout, int width,
+		int height) {
+		// TODO Auto-generated constructor stub
+		mContext = context;
+		mDvbPlayLayout = relativeLayout;
+		mSurfaceView = surfaceView;
+		mWidth = width;
+		mHeight = height;
+		mSurfaceHolder = mSurfaceView.getHolder();
+		mSurfaceView.setFocusable(false);
+		//mSurfaceView.setZOrderOnTop(false);
+		mSurfaceHolder.setSizeFromLayout();
+		mSurfaceHolder.addCallback(mCallback);
+		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+		mState = inited;
+	}
+
 	public int start(String url) {
 		Log.d(TAG,"start called... url = "+url +" mSurfaceCreated = "+mSurfaceCreated);
 		
@@ -67,6 +106,81 @@ public class WebPlayer {
 		handler.sendEmptyMessageDelayed(0, 1000);
 		return 0;
 	}
+
+	public void playDvb(String url, int x, int y, int w, int h){
+		mDvbUrl = url;
+		mSurfaceView.setVisibility(View.GONE);
+		mDvbPlayLayout.setVisibility(View.VISIBLE);
+		mHostView = initRemoteView(mContext);
+		if (mHostView != null) {
+			mDvbPlayLayout.addView(mHostView);
+		}
+		//设置没有插cabel线时所显示的图片
+		mHostView.setVideoMask(
+			mContext.getResources().getDrawable(R.drawable.ic_launcher),
+			TeeveeWidgetHostView.MASK_FLAG_NO_VIDEO);
+
+		if(mHostView!=null){
+			Log.d(TAG, "onClick toChannel");
+			//开始播放
+			mHostView.toChannel(url);
+
+			Log.d(TAG, "onClick setVideoBounds");
+			Rect r = new Rect();
+			r.left = x;
+			r.top = y;
+			r.right = w;
+			r.bottom = h;
+			//设置视频大小、位置
+			mHostView.setVideoBounds(r);
+
+			Log.d(TAG, "onClick setVolume");
+			mHostView.setVolume(0.5f);
+		}
+	}
+
+	public void dvbResume(){
+		if (mDvbUrl != null){
+			if(mAppWidgetHost!=null){
+				Log.d(TAG, "onClick stop");
+				mHostView.toChannel(mDvbUrl);
+			}
+		}
+	}
+
+	public void stopDvbPlay(){
+		if(mAppWidgetHost!=null){
+			Log.d(TAG, "onClick stop");
+			//停止播放
+			mHostView.stop();
+		}
+	}
+
+	private TeeveeWidgetHostView initRemoteView(Context context) {
+		Log.d(TAG, "initRemoteView-->>");
+		TeeveeWidgetHostView hostView = null;
+		mNetworkManager = NetworkManager.getInstance(context);
+		Log.d(TAG, "initRemoteView-- 1");
+		mAppWidgetManager = AppWidgetManager.getInstance(context);
+		Log.d(TAG, "initRemoteView-- 2");
+		mAppWidgetHost = new TeeveeWidgetHost(context, APPWIDGET_HOST_ID);
+		Log.d(TAG, "initRemoteView-->>3");
+		mAppWidgetHost.startListening();
+		appWidgetId = mAppWidgetHost.allocateAppWidgetId();
+		Log.d(TAG, "initRemoteView-->>4");
+		boolean b = mNetworkManager.bindNetworkTeeveeWidgetId(ID, appWidgetId,
+			NetworkManager.PROPERTY_TEEVEE_WIDGET_SMALL);
+		Log.d(TAG, "initRemoteView--b:"+b);
+		if (b) {
+			mAppWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+			hostView = (TeeveeWidgetHostView) mAppWidgetHost.createView(
+				context, appWidgetId, mAppWidgetInfo);
+			hostView.setId(appWidgetId);
+		}
+		Log.d(TAG, "initRemoteView--<<");
+		return hostView;
+	}
+
 	private Handler handler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
@@ -306,6 +420,8 @@ public class WebPlayer {
 			mMediaPlayer.start();
 		}
 	}
+
+
 
 	public void seek(int pos) {
 		// TODO Auto-generated method stub
