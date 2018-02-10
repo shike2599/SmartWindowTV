@@ -5,7 +5,12 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.appwidget.TeeveeWidgetHost;
 import android.appwidget.TeeveeWidgetHostView;
+import android.ccdt.dvb.service.DvbPlayerListener;
+import android.ccdt.dvb.service.DvbPlayerService;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -17,7 +22,10 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.telecast.NetworkManager;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -62,6 +70,11 @@ public class WebPlayer {
 	static final int APPWIDGET_HOST_ID = 0x100;
 	static final String ID = "284c19b9-39aa-45e4-9956-9e15aa6e9168";//陕西
 	private String mDvbUrl;
+	private DvbPlayerService mService = null;
+	private int mX;
+	private int mY;
+	private int mW;
+	private int mH;
 
 	public WebPlayer( SurfaceView surfaceView, int width,
 			int height) {
@@ -96,6 +109,8 @@ public class WebPlayer {
 		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
 		mState = inited;
+
+//		playDvb("dvb://1.1.76", 63, 143, 558, 305);
 	}
 
 	public int start(String url) {
@@ -107,52 +122,123 @@ public class WebPlayer {
 		return 0;
 	}
 
-	public void playDvb(String url, int x, int y, int w, int h){
+	public void playDvb(String url, final int x, final int y, final int w, final int h){
 		mDvbUrl = url;
-		mSurfaceView.setVisibility(View.GONE);
-		mDvbPlayLayout.setVisibility(View.VISIBLE);
-		mHostView = initRemoteView(mContext);
-		if (mHostView != null) {
-			mDvbPlayLayout.addView(mHostView);
+		mX = x;
+		mY = y;
+		mW = w;
+		mH = h;
+		Log.i(TAG, "playDvb===>>" + url);
+		if (url.startsWith("channelId")){
+			Log.i(TAG, "channelId===>>" + url);
+			mSurfaceView.setVisibility(View.GONE);
+			mDvbPlayLayout.setVisibility(View.VISIBLE);
+			mHostView = initRemoteView(mContext);
+			if (mHostView != null) {
+				mDvbPlayLayout.addView(mHostView);
+			}
+			//设置没有插cabel线时所显示的图片
+			mHostView.setVideoMask(
+				mContext.getResources().getDrawable(R.drawable.ic_launcher),
+				TeeveeWidgetHostView.MASK_FLAG_NO_VIDEO);
+
+			if(mHostView!=null){
+				Log.d(TAG, "onClick toChannel");
+				//开始播放
+				mHostView.toChannel(url);
+
+				Log.d(TAG, "onClick setVideoBounds");
+				Rect r = new Rect();
+				r.left = x;
+				r.top = y;
+				r.right = w;
+				r.bottom = h;
+				//设置视频大小、位置
+				mHostView.setVideoBounds(r);
+
+				Log.d(TAG, "onClick setVolume");
+				mHostView.setVolume(0.5f);
+			}
+		}else if (url.startsWith("dvb:")){
+			Log.i(TAG, "dvb:===>>" + url);
+			binDvbServer();
 		}
-		//设置没有插cabel线时所显示的图片
-		mHostView.setVideoMask(
-			mContext.getResources().getDrawable(R.drawable.ic_launcher),
-			TeeveeWidgetHostView.MASK_FLAG_NO_VIDEO);
 
-		if(mHostView!=null){
-			Log.d(TAG, "onClick toChannel");
-			//开始播放
-			mHostView.toChannel(url);
-
-			Log.d(TAG, "onClick setVideoBounds");
-			Rect r = new Rect();
-			r.left = x;
-			r.top = y;
-			r.right = w;
-			r.bottom = h;
-			//设置视频大小、位置
-			mHostView.setVideoBounds(r);
-
-			Log.d(TAG, "onClick setVolume");
-			mHostView.setVolume(0.5f);
-		}
 	}
+
+	private void binDvbServer(){
+		Intent intent = new Intent();
+		intent.setAction("android.ccdt.dvb.service.DvbPlayerService");
+		boolean ret = mContext.bindService(intent,  conn, Context.BIND_AUTO_CREATE);
+	}
+
+	private ServiceConnection conn = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			Log.d(TAG, " onServiceConnected ...");
+			mService = DvbPlayerService.Stub.asInterface(service);
+
+			try {
+
+				mService.setPlayerListener(mListener);
+				//int x, int y, int w, int h
+				//设定视频显示框
+				mService.setPosition(mX, mY, mW, mH);
+				/*url格式：dvb://network_id.transport_stream_id.service_id*/
+				mService.start(mDvbUrl);//陕西卫视
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			Log.d(TAG, " onServiceDisconnected ...");
+		}
+	};
+
+
+	private DvbPlayerListener mListener = new DvbPlayerListener.Stub() {
+
+		@Override
+		public void onError(int errorCode) throws RemoteException {
+			// TODO Auto-generated method stub
+			Log.d(TAG, "onError    errorCode= " + errorCode);
+		}
+	};
 
 	public void dvbResume(){
 		if (mDvbUrl != null){
-			if(mAppWidgetHost!=null){
-				Log.d(TAG, "onClick stop");
-				mHostView.toChannel(mDvbUrl);
+			Log.d(TAG, "onClick stop");
+			if (mDvbUrl.startsWith("channelId")){
+				if(mAppWidgetHost!=null){
+					mHostView.toChannel(mDvbUrl);
+				}
+			}else if (mDvbUrl.startsWith("dvb:")){
+				binDvbServer();
 			}
 		}
 	}
 
 	public void stopDvbPlay(){
-		if(mAppWidgetHost!=null){
-			Log.d(TAG, "onClick stop");
-			//停止播放
-			mHostView.stop();
+
+		Log.d(TAG, "onClick stop");
+		//停止播放
+		if (mDvbUrl != null){
+			if (mDvbUrl.startsWith("channelId")){
+				if(mAppWidgetHost!=null){
+					mHostView.stop();
+				}
+			}else if (mDvbUrl.startsWith("dvb:")){
+				try {
+					mService.stop();
+					mContext.unbindService(conn);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -379,7 +465,33 @@ public class WebPlayer {
 			
 			mSurfaceView.setLayoutParams(params);
 		}
-		Log.d(TAG," "+CommonFunction._FUNC_()+" end");
+		Log.d(TAG," setVideoLayout:"+"x=" + x + ",y=" + y + ",w=" + w
+		+ ",h=" + h);
+
+		if (!TextUtils.isEmpty(mDvbUrl)){
+
+			if (mDvbUrl.startsWith("channelId")){
+				if (mHostView != null){
+					Rect r = new Rect();
+					r.left = x;
+					r.top = y;
+					r.right = w;
+					r.bottom = h;
+					//设置视频大小、位置
+					mHostView.setVideoBounds(r);
+				}
+			}else if (mDvbUrl.startsWith("dvb:")){
+				if (mService != null){
+					try {
+						mService.setPosition(x, y, w, h);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+		}
+
 		return 0;
 	}
 

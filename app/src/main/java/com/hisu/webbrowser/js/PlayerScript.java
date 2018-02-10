@@ -47,12 +47,16 @@ public class PlayerScript {
 			return -1;
 		}
 
-		if ("http".startsWith(url)){
+		if (TextUtils.isEmpty(url)){
+			return -1;
+		}
+
+		if (url.startsWith("http")){
 			Message msg = new Message();
 			msg.what = BrowserMessage.SW_MEDIA_CMD_PLAY;
 			msg.getData().putString("URL", url);
 			mHandler.sendMessage(msg);
-		}else if ("channelId".startsWith(url)){
+		}else {
 			Message msg = new Message();
 			msg.what = BrowserMessage.SW_MEDIA_DVB_PLAY;
 			PlayBean playBean = new PlayBean(url, x, y, w, h);
