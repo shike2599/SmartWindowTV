@@ -55,6 +55,10 @@ public class CacheVideo{
 		this.name = name;
 	}
 	public boolean equals(CacheVideo other){
+		if (this.url == null){
+			return false;
+		}
+
 		return this.id == other.id 
 				&& this.hotelId == other.hotelId
 				&& this.url.equals(other.url);

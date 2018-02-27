@@ -14,6 +14,8 @@ import com.hisu.webbrowser.player.WebPlayer;
 import com.hisu.webbrowser.util.BrowserMessage;
 import com.hisu.webbrowser.util.CommonFunction;
 
+import java.io.File;
+
 //import com.arisci.util.SWMessage;
 
 public class PlayerScript {
@@ -66,6 +68,16 @@ public class PlayerScript {
 		setLocation(x,y,w,h);
 		return 0;
 	}
+
+	@JavascriptInterface
+	public int isZhuozhuang(){
+		File file = new File("/system/lib/libandroidtv_native.so");
+		if (file.exists()){
+			return 1;
+		}
+		return 0;
+	}
+
 	@JavascriptInterface
 	public int setLocation(int x,int y,int w,int h){
 		Log.d(TAG,"setLocation x ="+x+" y = "+y +" w="+w +" h= "+h);

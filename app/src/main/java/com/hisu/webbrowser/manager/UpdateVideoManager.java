@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.TextUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +33,7 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import org.w3c.dom.Text;
 
 public class UpdateVideoManager {
 	List<CacheVideo> mVideoList;
@@ -147,7 +149,12 @@ public class UpdateVideoManager {
 							break;
 						}
 					}
-					File file = new File(v.getSavePath());
+
+					String savePath = v.getSavePath();
+					if(TextUtils.isEmpty(savePath)){
+						return false;
+					}
+					File file = new File(savePath);
 					Log.e("file", file.toString());
 					if(!keep){
 						if(file.exists()){
@@ -212,8 +219,18 @@ public class UpdateVideoManager {
 //		}
 		
 		HttpUtils http = new HttpUtils();
-		File file = new File(video.getSavePath());
-		if(file.exists())file.delete();
+
+		String savePath = video.getSavePath();
+		if (TextUtils.isEmpty(savePath)){
+			return;
+		}
+		File file = new File(savePath);
+		if (file == null){
+			return;
+		}
+		if(file.exists()) {
+			file.delete();
+		}
 		http.download(video.getUrl(),
 		    video.getSavePath(),
 		    true, 
