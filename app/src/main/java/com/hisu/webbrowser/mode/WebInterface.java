@@ -21,7 +21,7 @@ public class WebInterface {
 	 * */
 
 
-	//	public static  String URL_PREFIX = "http://10.14.1.210:8991";//内蒙 党建
+	//	public static  String URL_PREFIX = "http://10.14.1.210:8991";//内蒙 党建    
 //	public static  String URL_PREFIX = "http://10.14.1.210:8088";//内蒙 酒店
 //	public static  String URL_PREFIX = "http://10.14.1.210:8809";//内蒙 社区
 //	public static  String URL_PREFIX = "http://119.44.217.58:8809";//衡阳
