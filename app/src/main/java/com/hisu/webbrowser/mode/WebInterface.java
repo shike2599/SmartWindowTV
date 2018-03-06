@@ -21,7 +21,7 @@ public class WebInterface {
 	 * */
 
 
-	//	public static  String URL_PREFIX = "http://10.14.1.210:8991";//内蒙 党建
+	//	public static  String URL_PREFIX = "http://10.14.1.210:8991";//内蒙 党建    
 //	public static  String URL_PREFIX = "http://10.14.1.210:8088";//内蒙 酒店
 //	public static  String URL_PREFIX = "http://10.14.1.210:8809";//内蒙 社区
 //	public static  String URL_PREFIX = "http://119.44.217.58:8809";//衡阳
@@ -29,7 +29,8 @@ public class WebInterface {
 //	public static  String URL_PREFIX = "http://192.168.10.64:8809";//襄阳 刘工
 //	public static  String URL_PREFIX = "http://172.20.27.251:8809";//襄阳 张少伟
 //	public static  String URL_PREFIX = "http://172.31.137.2:8809";//襄阳  王瑞
-	public static  String URL_PREFIX = "http://10.43.116.33";//新媒体 33      cmd
+//	public static  String URL_PREFIX = "http://10.43.116.33";//新媒体 33      cmd
+	public static  String URL_PREFIX = "http://10.43.127.52";
 //	public static  String URL_PREFIX = "http://10.43.116.80";//新媒体 80 /
 //	public static  String URL_PREFIX = "http://10.43.158.146";
 //	public static  String URL_PREFIX = "http://172.16.134.195:8809";//衡阳 内网
