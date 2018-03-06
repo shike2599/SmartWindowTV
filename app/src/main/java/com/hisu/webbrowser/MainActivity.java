@@ -54,10 +54,11 @@ import com.hisu.webbrowser.util.ToolsUtil;
 	protected AlertDialog mDialog;
 	ImageView defaultImage;
 
-	private int handler = 0;
+	private int handler = 1;
 	private boolean ShutDown = false;
 	WebView webView;
 	private Handler mHandler = new Handler() {
+		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
