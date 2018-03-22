@@ -32,7 +32,7 @@ public class WebInterface {
 //	public static  String URL_PREFIX = "http://10.43.116.33";//新媒体 33      cmd
 
 	public static  String URL_PREFIX = "http://10.43.127.52";
-	
+
 //	public static  String URL_PREFIX = "http://10.43.116.80";//新媒体 80 /
 
 //	public static  String URL_PREFIX = "http://10.43.158.146";
