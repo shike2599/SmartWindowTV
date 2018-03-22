@@ -1,15 +1,5 @@
   package com.hisu.webbrowser.js;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -41,6 +31,16 @@ import com.hisu.webbrowser.util.BrowserUtil;
 import com.hisu.webbrowser.util.CommonFunction;
 import com.hisu.webbrowser.util.DataUtil;
 import com.hisu.webbrowser.util.ToolsUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
   public class SystemScript {
 	private final String TAG = "SystemScript";
@@ -221,7 +221,7 @@ import com.hisu.webbrowser.util.ToolsUtil;
 	}
 	@JavascriptInterface
 	public void exitApp() {
-		Log.d(TAG, " " + CommonFunction._FUNC_());
+		Log.i(TAG,"=====exitApp====" );
 		StringBuffer sb = new StringBuffer();
 		sb.append("确定要退出" + mContext.getString(R.string.app_name) + "?");
 		Dialog dialog = new AlertDialog.Builder(mContext).setTitle("友情提示").setMessage(sb.toString())

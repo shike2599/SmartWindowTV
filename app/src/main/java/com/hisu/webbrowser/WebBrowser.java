@@ -1,7 +1,5 @@
 package com.hisu.webbrowser;
 
-import java.io.File;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -24,7 +22,6 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.hisu.webbrowser.R;
 import com.hisu.webbrowser.activity.HisuDialogActivity;
 import com.hisu.webbrowser.bean.PlayBean;
 import com.hisu.webbrowser.js.PlayerScript;
@@ -34,6 +31,8 @@ import com.hisu.webbrowser.player.WebPlayer;
 import com.hisu.webbrowser.util.BrowserEvent;
 import com.hisu.webbrowser.util.BrowserMessage;
 import com.hisu.webbrowser.util.BrowserUtil;
+
+import java.io.File;
 
 public class WebBrowser {
 

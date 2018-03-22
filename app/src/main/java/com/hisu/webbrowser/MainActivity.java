@@ -1,12 +1,5 @@
 	package com.hisu.webbrowser;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -16,7 +9,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.*;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,10 +26,18 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.hisu.webbrowser.R;
 import com.hisu.webbrowser.js.SystemScript;
 import com.hisu.webbrowser.manager.UpdateManager;
 import com.hisu.webbrowser.manager.UpdateVideoManager;
@@ -41,6 +46,13 @@ import com.hisu.webbrowser.player.WebPlayer;
 import com.hisu.webbrowser.util.BrowserEvent;
 import com.hisu.webbrowser.util.DataUtil;
 import com.hisu.webbrowser.util.ToolsUtil;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 	public class MainActivity extends Activity {
 	private static final String TAG = "SmartHotelViewApp";
@@ -79,7 +91,7 @@ import com.hisu.webbrowser.util.ToolsUtil;
 						// 检测本地视频更新
 						UpdateVideoManager uvm = new UpdateVideoManager(
 								mContext, mHandler);
-						uvm.checkUpdate(mac);   
+						uvm.checkUpdate(mac);
 //						sendEmptyMessageDelayed(1, 2000);
 						break;
 					}
@@ -479,21 +491,32 @@ import com.hisu.webbrowser.util.ToolsUtil;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
+
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		// TODO Auto-generated method stub
-		Log.e("键值", "event:"+event.getKeyCode());
+		Log.e(TAG, "event:"+event.getKeyCode());
 		// back ˫��Ӧ
-		if(event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+		if (event.getAction() != KeyEvent.ACTION_DOWN)
+			return super.dispatchKeyEvent(event);
+
+	    int	keyCode = event.getKeyCode();
+		if (keyCode == BrowserEvent.KeyEvent.KEY_EXIT){
+			mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_EXIT);
+			return true;
+		}
+
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
 			if (mLoadType != -1){
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
+			return true;
 		}
-	  int	keyCode = event.getKeyCode();
-		if (keyCode == 4) {
-			By2Click();
-		}
+
+//		if (keyCode == 4) {
+//			By2Click();
+//		}
 		if (isExit) {
 			putpw(keyCode);
 		}
@@ -515,7 +538,8 @@ import com.hisu.webbrowser.util.ToolsUtil;
 	    	finish();
 	    }  
 	} 
-	
+
+
 	/**
 	 * 双击输入密码
 	 */

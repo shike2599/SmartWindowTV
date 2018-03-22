@@ -3,6 +3,7 @@ package com.hisu.webbrowser.util;
 public class BrowserEvent {
 	public static class KeyEvent{
 		public static final int KEY_BACK = 340;
+		public static final int KEY_EXIT = 82;
 		public static final int KEY_SELECT = 13;
 	
 		public static final int KEY_LEFT = 37;
