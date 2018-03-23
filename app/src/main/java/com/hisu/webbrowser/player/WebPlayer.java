@@ -154,6 +154,7 @@ public class WebPlayer {
 				r.right = w;
 				r.bottom = h;
 				//设置视频大小、位置
+				mHostView.setAutoVideoBounds();
 				mHostView.setVideoBounds(r);
 
 				Log.d(TAG, "onClick setVolume");

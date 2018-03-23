@@ -256,6 +256,7 @@ public class WebBrowser {
 			e.printStackTrace();
 		}
 
+
 		// WebView 缓存文件
 		File appCacheDir = new File(mContext.getDir("cache",
 				Context.MODE_PRIVATE).getPath());
