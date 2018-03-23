@@ -148,12 +148,16 @@ public class WebPlayer {
 				mHostView.toChannel(url);
 
 				Log.d(TAG, "onClick setVideoBounds");
+
+				Log.d(TAG,"x----"+x+"---y----"+y+"---w---"+w+"---h----"+h);
 				Rect r = new Rect();
 				r.left = x;
 				r.top = y;
-				r.right = w;
-				r.bottom = h;
+				r.right = w + x;
+				r.bottom = h + y;
 				//设置视频大小、位置
+				Log.d(TAG,"left----"+r.left+"---top----"+r.top+
+						"--- right---"+r.right+"---bottom----"+r.bottom);
 				mHostView.setAutoVideoBounds();
 				mHostView.setVideoBounds(r);
 
@@ -452,20 +456,9 @@ public class WebPlayer {
 		}else{
 			mSurfaceView.setVisibility(View.VISIBLE);
 		}
-		if(x+w > mWidth)
-			w = mWidth-x;
-		if(y+h > mHeight)
-			h = mHeight-y;
 
-		MarginLayoutParams params = (MarginLayoutParams)mSurfaceView.getLayoutParams();
-		if(params!=null){
-			params.leftMargin = x;
-			params.topMargin = y;
-			params.width = w;
-			params.height = h;
-			
-			mSurfaceView.setLayoutParams(params);
-		}
+		surfaceSetUp(x, y, w, h);
+
 		Log.d(TAG," setVideoLayout:"+"x=" + x + ",y=" + y + ",w=" + w
 		+ ",h=" + h);
 
@@ -476,8 +469,13 @@ public class WebPlayer {
 					Rect r = new Rect();
 					r.left = x;
 					r.top = y;
-					r.right = w;
-					r.bottom = h;
+					r.right = w+x;
+					r.bottom = h+y;
+
+					Log.d(TAG,"new_left--"+r.left+"--- " +
+							"new_top---"+r.top+"--new_right--"+
+							r.right+"---new_bottom--"+r.bottom
+					);
 					//设置视频大小、位置
 					mHostView.setVideoBounds(r);
 				}
@@ -494,6 +492,24 @@ public class WebPlayer {
 		}
 
 		return 0;
+	}
+
+	private void surfaceSetUp(int x, int y, int w, int h){
+		if(x+w > mWidth)
+			w = mWidth-x;
+		if(y+h > mHeight)
+			h = mHeight-y;
+
+		MarginLayoutParams params = (MarginLayoutParams)
+				mSurfaceView.getLayoutParams();
+		if(params!=null){
+			params.leftMargin = x;
+			params.topMargin = y;
+			params.width = w;
+			params.height = h;
+
+			mSurfaceView.setLayoutParams(params);
+		}
 	}
 
 	public int getCurrentTimePos() {
