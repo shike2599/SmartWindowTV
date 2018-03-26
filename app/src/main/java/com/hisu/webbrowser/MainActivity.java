@@ -498,28 +498,52 @@ import java.util.TimerTask;
 		// TODO Auto-generated method stub
 		Log.e(TAG, "event:"+event.getKeyCode());
 		// back ˫��Ӧ
-		if (event.getAction() != KeyEvent.ACTION_DOWN)
-			return super.dispatchKeyEvent(event);
-
-	    int	keyCode = event.getKeyCode();
-		if (keyCode == BrowserEvent.KeyEvent.KEY_EXIT){
-			mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_EXIT);
-			return true;
-		}
-
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			if (mLoadType != -1){
-				android.os.Process.killProcess(android.os.Process.myPid());
+//		if (event.getAction() != KeyEvent.ACTION_DOWN)
+//			return super.dispatchKeyEvent(event);
+        if(event.getAction() == KeyEvent.ACTION_DOWN){
+			int	keyCode = event.getKeyCode();
+			if (keyCode == BrowserEvent.KeyEvent.KEY_EXIT){
+				mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_EXIT);
+				return true;
 			}
-			return true;
-		}
+
+			if(keyCode == KeyEvent.KEYCODE_BACK) {
+				if (mLoadType != -1){
+					android.os.Process.killProcess(android.os.Process.myPid());
+				}else{
+					mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_BACK);
+				}
+				return true;
+			}
 
 //		if (keyCode == 4) {
 //			By2Click();
 //		}
-		if (isExit) {
-			putpw(keyCode);
+			if (isExit) {
+				putpw(keyCode);
+			}
 		}
+//	    int	keyCode = event.getKeyCode();
+//		if (keyCode == BrowserEvent.KeyEvent.KEY_EXIT){
+//			mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_EXIT);
+//			return true;
+//		}
+//
+//		if(keyCode == KeyEvent.KEYCODE_BACK) {
+//			if (mLoadType != -1){
+//				android.os.Process.killProcess(android.os.Process.myPid());
+//			}else{
+//				mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_BACK);
+//			}
+//			return true;
+//		}
+//
+////		if (keyCode == 4) {
+////			By2Click();
+////		}
+//		if (isExit) {
+//			putpw(keyCode);
+//		}
 		
 		return super.dispatchKeyEvent(event);
 	
