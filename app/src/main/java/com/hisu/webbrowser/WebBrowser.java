@@ -469,7 +469,12 @@ public class WebBrowser {
 					break;
 				case BrowserMessage.SW_CMD_EXIT:
 					mWebPlayer.stop(0);
-					android.os.Process.killProcess(android.os.Process.myPid());
+//					android.os.Process.killProcess(android.os.Process.myPid());
+					Intent intent = new Intent(Intent.ACTION_MAIN);
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.addCategory(Intent.CATEGORY_HOME);
+					mContext.startActivity(intent);
+					ac.finish();
 					break;
 
 				case BrowserMessage.SW_CMD_PLAY_END:

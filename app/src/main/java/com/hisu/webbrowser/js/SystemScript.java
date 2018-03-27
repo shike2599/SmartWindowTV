@@ -1,12 +1,9 @@
   package com.hisu.webbrowser.js;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -20,7 +17,6 @@ import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
 import com.hisu.webbrowser.MainActivity;
-import com.hisu.webbrowser.R;
 import com.hisu.webbrowser.activity.UpathActivity;
 import com.hisu.webbrowser.activity.VideoVLCActivity;
 import com.hisu.webbrowser.activity.VideoViewActivity;
@@ -222,21 +218,22 @@ import java.util.List;
 	@JavascriptInterface
 	public void exitApp() {
 		Log.i(TAG,"=====exitApp====" );
-		StringBuffer sb = new StringBuffer();
-		sb.append("确定要退出" + mContext.getString(R.string.app_name) + "?");
-		Dialog dialog = new AlertDialog.Builder(mContext).setTitle("友情提示").setMessage(sb.toString())
-				.setPositiveButton("确   定", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						exit();
-					}
-				}).setNegativeButton("取    消", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-
-						dialog.dismiss();
-					}
-				}).create();
-		dialog.show();
+		exit();
+//		StringBuffer sb = new StringBuffer();
+//		sb.append("确定要退出" + mContext.getString(R.string.app_name) + "?");
+//		Dialog dialog = new AlertDialog.Builder(mContext).setTitle("友情提示").setMessage(sb.toString())
+//				.setPositiveButton("确   定", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						exit();
+//					}
+//				}).setNegativeButton("取    消", new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int whichButton) {
+//
+//						dialog.dismiss();
+//					}
+//				}).create();
+//		dialog.show();
 	}
 
 	  /*
