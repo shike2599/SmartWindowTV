@@ -511,4 +511,15 @@ import java.util.List;
 		Log.d(TAG, " keyCode=" + keyCode + " irkeyCode="+irkeyCode);
 		if(irkeyCode>0)preventDefaultKeyList.add(irkeyCode);
 	}
+
+      public static String group_ID = null;
+	  @JavascriptInterface
+	  public String getGroupID(){
+		  Log.d(TAG, "GroupID---- " + group_ID);
+		  if(group_ID != null && group_ID.equals(null)){
+			  return group_ID;
+		  }else{
+		  	return null;
+		  }
+	  }
 }

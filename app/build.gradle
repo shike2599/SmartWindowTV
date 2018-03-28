@@ -11,6 +11,7 @@ android {
         versionCode 11
         versionName "v1.11"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -45,4 +46,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/iPanelAndroidtv.jar')
+    provided files('libs/framework.jar')
 }
