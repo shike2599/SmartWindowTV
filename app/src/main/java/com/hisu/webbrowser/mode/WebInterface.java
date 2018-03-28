@@ -62,7 +62,10 @@ public class WebInterface {
 
 	public static String DEFAULT_HOME_PAGE(){
 //		return "10.10.7.82:8088";21l
-		return URL_PREFIX+"/smart_hotel/webpage/startup.html";
+//		return URL_PREFIX+"/smart_hotel/webpage/startup.html"; //智慧窗原本的启动地址
+		
+		return URL_PREFIX+"/smart_hotel/webpage/startup52.html"; //测试启动地址
+
 	}
 	public static String URL_APP_VERSION(){
 		return URL_PREFIX+"/SmartHotelInterface/api/smartHotel/checkAppVersion";
