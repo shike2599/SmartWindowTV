@@ -2,8 +2,8 @@ package com.hisu.webbrowser.mode;
 
 
 public class WebInterface {
-	/*
-	 * versionCode 10
+    /*
+     * versionCode 10
 	 * updateName CommunistTV
 	 * */
 //	private static final String URL_PREFIX = "http://10.43.116.80";
@@ -21,7 +21,7 @@ public class WebInterface {
 	 * */
 
 
-	//	public static  String URL_PREFIX = "http://10.14.1.210:8991";//内蒙 党建    
+    //	public static  String URL_PREFIX = "http://10.14.1.210:8991";//内蒙 党建
 //	public static  String URL_PREFIX = "http://10.14.1.210:8088";//内蒙 酒店
 //	public static  String URL_PREFIX = "http://10.14.1.210:8809";//内蒙 社区
 //	public static  String URL_PREFIX = "http://119.44.217.58:8809";//衡阳
@@ -31,7 +31,7 @@ public class WebInterface {
 //	public static  String URL_PREFIX = "http://172.31.137.2:8809";//襄阳  王瑞
 //	public static  String URL_PREFIX = "http://10.43.116.33";//新媒体 33      cmd
 
-	public static  String URL_PREFIX = "http://10.43.127.52";
+    public static String URL_PREFIX = "http://10.43.127.52";
 
 //	public static  String URL_PREFIX = "http://10.43.116.80";//新媒体 80 / 智慧窗
 
@@ -51,40 +51,42 @@ public class WebInterface {
 	 * */
 //	public static  String URL_PREFIX = "http://enterprise.hisugj.com";
 
-	//	public static  String DEFAULT_HOME_PAGE = "http://124.47.33.73/nehe(9-27)/";
+    //	public static  String DEFAULT_HOME_PAGE = "http://124.47.33.73/nehe(9-27)/";
 //	public static  String DEFAULT_HOME_PAGE = URL_PREFIX+"/smart_hotel/webpage/startup.html";
 //
 //	public static  String URL_APP_VERSION =  URL_PREFIX+"/SmartHotelInterface/api/smartHotel/checkAppVersion";
 //
 //	public static  String URL_CACHE_VIDEO =  URL_PREFIX+"/SmartHotelInterface/api/smartHotel/cacheVideos";
-	public static final String SYSTEM_URL_CACHE_VIDEO = "http://123.57.18.76:8991/SmartHotelInterface/api/smartHotelAdmin/checkFileVersion";
-	//public static final String URL_CACHE_VIDEO =  URL_PREFIX+"/apk/cacheVideos.json";
+    public static final String SYSTEM_URL_CACHE_VIDEO = "http://123.57.18.76:8991/SmartHotelInterface/api/smartHotelAdmin/checkFileVersion";
+    //public static final String URL_CACHE_VIDEO =  URL_PREFIX+"/apk/cacheVideos.json";
 
-	public static String DEFAULT_HOME_PAGE(){
+    public static String DEFAULT_HOME_PAGE() {
 //		return "10.10.7.82:8088";21l
 //		return URL_PREFIX+"/smart_hotel/webpage/startup.html"; //智慧窗原本的启动地址
-		
-		return URL_PREFIX+"/smart_hotel/webpage/startup52.html"; //测试启动地址
+        return URL_PREFIX + "/smart_hotel/webpage/startup52.html"; //智慧窗测试启动地址
 
-	}
-	public static String URL_APP_VERSION(){
-		return URL_PREFIX+"/SmartHotelInterface/api/smartHotel/checkAppVersion";
-	}
-	public static String URL_CACHE_VIDEO(){
-		return URL_PREFIX+"/SmartHotelInterface/api/smartHotel/cacheVideos";
-	}
-	/*
-	 * 更新系统开机视频
-	 * */
-	public static boolean DOWNOPENSYSVIDEO = false;
-	/*
-	 * 内嵌视频
-	 * */
-	public static boolean DOWNVIDEO = true;
-	/*
-	 * 断网页面
-	 * */
-	public static boolean ERRORACTIVITY = false;
-	
-	
+    }
+
+    public static String URL_APP_VERSION() {
+        return URL_PREFIX + "/SmartHotelInterface/api/smartHotel/checkAppVersion";
+    }
+
+    public static String URL_CACHE_VIDEO() {
+        return URL_PREFIX + "/SmartHotelInterface/api/smartHotel/cacheVideos";
+    }
+
+    /*
+     * 更新系统开机视频
+     * */
+    public static boolean DOWNOPENSYSVIDEO = false;
+    /*
+     * 内嵌视频
+     * */
+    public static boolean DOWNVIDEO = true;
+    /*
+     * 断网页面
+     * */
+    public static boolean ERRORACTIVITY = false;
+
+
 }

@@ -516,10 +516,10 @@ import java.util.List;
 	  @JavascriptInterface
 	  public String getGroupID(){
 		  Log.d(TAG, "GroupID---- " + group_ID);
-		  if(group_ID != null && group_ID.equals(null)){
+		  if(group_ID != null){
 			  return group_ID;
 		  }else{
-		  	return null;
+		  	return "-1";
 		  }
 	  }
 }
