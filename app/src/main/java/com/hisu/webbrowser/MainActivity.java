@@ -158,6 +158,7 @@
 
 		SystemScript.LOAD_TYPE = mLoadType;
 
+		Log.d(TAG,"SystemScript.LOAD_TYPE === "+SystemScript.LOAD_TYPE);
 		/*判断是否有修改的启动IP
 		 * */
 		DataUtil data = new DataUtil(this);
