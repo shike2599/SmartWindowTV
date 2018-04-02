@@ -31,7 +31,9 @@ public class WebInterface {
 //	public static  String URL_PREFIX = "http://172.31.137.2:8809";//襄阳  王瑞
 //	public static  String URL_PREFIX = "http://10.43.116.33";//新媒体 33      cmd
 
-    public static String URL_PREFIX = "http://10.43.127.52";
+//    public static String URL_PREFIX = "http://10.43.127.52"; //智慧窗 201804020843
+
+	public static String URL_PREFIX = "http://10.43.116.33"; //智慧社区测试
 
 //	public static  String URL_PREFIX = "http://10.43.116.80";//新媒体 80 / 智慧窗
 
