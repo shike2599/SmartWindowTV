@@ -237,7 +237,11 @@ public class WebPlayer {
 				}
 			}else if (mDvbUrl.startsWith("dvb:")){
 				try {
-					mService.stop();
+
+					if(mService!=null){
+						mService.stop();
+					}
+
 					mContext.unbindService(conn);
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
