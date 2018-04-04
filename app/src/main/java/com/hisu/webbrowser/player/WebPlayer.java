@@ -240,9 +240,8 @@ public class WebPlayer {
 
 					if(mService!=null){
 						mService.stop();
+						mContext.unbindService(conn);
 					}
-
-					mContext.unbindService(conn);
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
