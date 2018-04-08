@@ -119,6 +119,7 @@
 				um.checkUpdate();
 
 				Random rnd = new Random();
+				Log.d(TAG, "rnd = " + rnd);
 				String url = mUrl + (mUrl.indexOf("?") > -1 ? "&" : "?")
 						+ "Sbory_Math_Random=" + rnd.nextInt();
 				// url += "&stbMac=52-54-4F-FF-FF-F6";
@@ -211,6 +212,7 @@
 		mUrl = savedInstanceState == null
 				|| !savedInstanceState.containsKey(CURRENT_URL) ? mUrl
 				: savedInstanceState.getString(CURRENT_URL);
+		Log.d(TAG,"savedInstanceState-url --- mUrl==="+mUrl);
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 		int width = this.getWindowManager().getDefaultDisplay().getWidth();
 		int height = this.getWindowManager().getDefaultDisplay().getHeight();
