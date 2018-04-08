@@ -176,11 +176,13 @@
 		
 		if(intent != null && intent.getIntExtra("type", -1) != -1){
 			mUrl = mUrl + "?jump_type=" + intent.getIntExtra("type", -1);
+			Log.d(TAG,"Intent-type --- mUrl==="+mUrl);
 		}
 		
 //		Toast.makeText(getApplication(), mUrl, Toast.LENGTH_LONG).show();
 		if (intent != null && intent.getStringExtra("url") != null) {
 			mUrl = intent.getStringExtra("url");
+			Log.d(TAG,"Intent-url --- mUrl==="+mUrl);
 		}
 		
 //
