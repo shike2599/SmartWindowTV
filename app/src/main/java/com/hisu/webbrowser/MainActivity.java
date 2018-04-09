@@ -468,9 +468,13 @@
 //			
 			if(ShutDown){
 				finish();
+				return false;
+			}
+			if(SystemScript.LOAD_TYPE != -1){
+				return true;
 			}
 //			Log.d(TAG, "onKeyDown KEYCODE_BACK");
-			return false;
+
 		case KeyEvent.KEYCODE_HOME:
 //			 mBrowser.destroy();
 //			 android.os.Process.killProcess(android.os.Process.myPid());
@@ -518,7 +522,8 @@
 
 			if(keyCode == KeyEvent.KEYCODE_BACK) {
 				if (mLoadType != -1){
-					android.os.Process.killProcess(android.os.Process.myPid());
+					mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_BACK);
+//					android.os.Process.killProcess(android.os.Process.myPid());
 				}else{
 					mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_BACK);
 				}
