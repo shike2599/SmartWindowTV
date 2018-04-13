@@ -237,7 +237,8 @@
 		/*
 		 * 0 下载本地视频 1 不下载
 		 */
-		mHandler.sendEmptyMessageDelayed(handler, 2000);
+//		mHandler.sendEmptyMessageDelayed(handler, 2000);
+		mHandler.sendEmptyMessageDelayed(handler, 500);
 		mBrowser.clearCache();
 		mBrowser.clearWebViewCache();
 		// mBrowser.loadUrl(mUrl);
