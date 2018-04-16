@@ -238,7 +238,8 @@
 		 * 0 下载本地视频 1 不下载
 		 */
 //		mHandler.sendEmptyMessageDelayed(handler, 2000);
-		mHandler.sendEmptyMessageDelayed(handler, 500);
+//		mHandler.sendEmptyMessageDelayed(handler, 500);
+		mHandler.sendEmptyMessage(handler);
 		mBrowser.clearCache();
 		mBrowser.clearWebViewCache();
 		// mBrowser.loadUrl(mUrl);
@@ -417,7 +418,8 @@
 		}
 		if (isSetting) {
 			timer = 0;
-			mHandler.sendEmptyMessageDelayed(handler, 5000);
+//			mHandler.sendEmptyMessageDelayed(handler, 5000);
+			mHandler.sendEmptyMessage(handler);
 		}
 		/*
 		 * home键广播
