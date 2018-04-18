@@ -511,7 +511,7 @@
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method st ub
 		Log.e(TAG, "event:"+event.getKeyCode());
 		// back ˫��Ӧ
 //		if (event.getAction() != KeyEvent.ACTION_DOWN)
