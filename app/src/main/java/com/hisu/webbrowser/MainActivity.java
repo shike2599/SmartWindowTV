@@ -127,7 +127,7 @@
 			
 				mBrowser.loadUrl(url);
 				// mTimer.schedule(mTask, 10);
-//				sendEmptyMessageDelayed(2, 2000);
+				sendEmptyMessageDelayed(2, 1000);
 
 				break;
 			case 2:
