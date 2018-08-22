@@ -127,7 +127,7 @@
 			
 				mBrowser.loadUrl(url);
 				// mTimer.schedule(mTask, 10);
-				sendEmptyMessageDelayed(2, 2000);
+//				sendEmptyMessageDelayed(2, 2000);
 
 				break;
 			case 2:
@@ -171,7 +171,6 @@
 		//		new SystemScript(mHandler, getApplication(), MainActivity.this).openVLC("http://192.168.1.168:80/hdmi_ext");
 		
 		mUrl = WebInterface.DEFAULT_HOME_PAGE();
-//		mUrl = "http://www.baidu.com";
 
 		Intent intent = getIntent();
 		
@@ -179,36 +178,13 @@
 			mUrl = mUrl + "?jump_type=" + intent.getIntExtra("type", -1);
 			Log.d(TAG,"Intent-type --- mUrl==="+mUrl);
 		}
-		
-//		Toast.makeText(getApplication(), mUrl, Toast.LENGTH_LONG).show();
+
 		if (intent != null && intent.getStringExtra("url") != null) {
 			mUrl = intent.getStringExtra("url");
 			Log.d(TAG,"Intent-url --- mUrl==="+mUrl);
 		}
 		
-//
-//		if(intent != null && intent.getIntExtra("id", -1) != -1){
-//			
-//			int id = intent.getIntExtra("id", -1);
-//			Toast.makeText(mContext, "===" + id, Toast.LENGTH_SHORT).show();
-//			switch (id) {
-//			case 1:
-//				//改变跳转的地址
-//				//社区风采
-//				mUrl = "http://community.hisugj.com/smart_file/sys_file/hotel/57/static/sqfc_zzj/lang_zh/index.htm";
-//				break;
-//			case 2:
-//				//居家养老
-//				mUrl = "http://community.hisugj.com/smart_file/sys_file/hotel/57/static/yjhj/lang_zh/index.htm";
-//				break;
-//
-//			default:
-//				break;
-//			}
-//			
-//		}
-		
-		
+
 		mUrl = savedInstanceState == null
 				|| !savedInstanceState.containsKey(CURRENT_URL) ? mUrl
 				: savedInstanceState.getString(CURRENT_URL);
@@ -237,9 +213,9 @@
 		/*
 		 * 0 下载本地视频 1 不下载
 		 */
-//		mHandler.sendEmptyMessageDelayed(handler, 2000);
+		mHandler.sendEmptyMessageDelayed(handler, 2000);
 //		mHandler.sendEmptyMessageDelayed(handler, 500);
-		mHandler.sendEmptyMessage(handler);
+//		mHandler.sendEmptyMessage(handler);
 		mBrowser.clearCache();
 		mBrowser.clearWebViewCache();
 		// mBrowser.loadUrl(mUrl);
@@ -418,8 +394,8 @@
 		}
 		if (isSetting) {
 			timer = 0;
-//			mHandler.sendEmptyMessageDelayed(handler, 5000);
-			mHandler.sendEmptyMessage(handler);
+			mHandler.sendEmptyMessageDelayed(handler, 2000);
+//			mHandler.sendEmptyMessage(handler);
 		}
 		/*
 		 * home键广播
