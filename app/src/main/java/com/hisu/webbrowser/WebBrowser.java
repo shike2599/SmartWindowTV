@@ -171,7 +171,7 @@ public class WebBrowser {
 			public void onPageFinished(WebView view, String url) {
 				// TODO Auto-generated method stub
 				super.onPageFinished(view, url);
-//				mimage.setVisibility(View.GONE);
+				mimage.setVisibility(View.GONE);
 			}
 
 			/*
