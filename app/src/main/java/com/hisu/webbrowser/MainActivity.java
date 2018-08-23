@@ -126,8 +126,10 @@
 				Log.d(TAG, " mUrl = " + url);
 			
 				mBrowser.loadUrl(url);
+				defaultImage.clearAnimation();
+				defaultImage.setVisibility(View.INVISIBLE);
 				// mTimer.schedule(mTask, 10);
-				sendEmptyMessageDelayed(2, 1000);
+//				sendEmptyMessageDelayed(2, 1000);
 
 				break;
 			case 2:
