@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,6 +44,7 @@ public class WebBrowser {
 	private SystemScript mSystemScript;
 	private ImageView mimage;
 	private Activity ac;
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@SuppressLint("JavascriptInterface")
 	public WebBrowser(WebView webview, Context context, WebPlayer player,
 			ImageView image, final Activity ac) {
@@ -105,8 +107,10 @@ public class WebBrowser {
 		webSettings.setBuiltInZoomControls(true);
 
 		// 设置图片渲染
+//		webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 		webSettings.setRenderPriority(RenderPriority.HIGH);
-		webSettings.setBlockNetworkImage(true);
+//		webSettings.setBlockNetworkImage(true);
+		webSettings.setBlockNetworkImage(false);
 		webSettings.setLoadsImagesAutomatically(true);
 
 //		/*屏幕款*/
@@ -204,6 +208,7 @@ public class WebBrowser {
 			// @Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				// TODO Auto-generated method stub
+				Log.d(TAG,"---shouldOverrideUrlLoading----url--"+url);
 				mWebView.loadUrl(url);
 				mWebView.requestFocus();
 				return true;
