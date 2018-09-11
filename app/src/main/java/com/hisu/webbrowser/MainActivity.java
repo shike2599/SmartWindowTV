@@ -156,6 +156,13 @@
 		SystemScript.group_ID = SystemProperties.get("sys.auth.groupID");
         Log.d(TAG,"SystemScript.group_ID === "+SystemScript.group_ID);
 
+        //获取型号
+		String  model= android.os.Build.MODEL;
+		Log.d(TAG,"android.os.Build.MODEL === "+model);
+
+		String  ro_model= SystemProperties.get("ro.di.product_model");
+		Log.d(TAG,"ro.di.product_model === "+ro_model);
+
   		defaultImage = (ImageView) findViewById(R.id.defaultImage);
 		mLoadType = getIntent().getIntExtra("load_type", -1);
 
