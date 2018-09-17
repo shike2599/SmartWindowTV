@@ -4,6 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
     defaultConfig {
+//        applicationId "com.hisu.webbrowser.smartwinnolaun"
         applicationId "com.hisu.webbrowser.smartwin"
 
         minSdkVersion 15
