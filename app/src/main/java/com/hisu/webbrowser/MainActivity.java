@@ -70,6 +70,8 @@
 	private int handler = 1;
 	private boolean ShutDown = false;
 	WebView webView;
+	private WebPlayer webPlayer;
+
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -205,7 +207,7 @@
 
 		RelativeLayout dvbPlayLayout = (RelativeLayout) findViewById(R.id.dvb_layout);
 
-		WebPlayer webPlayer = new WebPlayer(this,surfaceView, dvbPlayLayout,width, height);
+		webPlayer = new WebPlayer(this,surfaceView, dvbPlayLayout,width, height);
 
 		webView = (WebView) findViewById(R.id.htmlview);
 //		 webView.loadUrl(mUrl);
@@ -561,7 +563,9 @@
 	        //do what you want  
 	    	Log.e("home","HOME");
 	    	mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_HOMEPAGE);
-	    	finish();
+			webPlayer.stop(0);
+	    	android.os.Process.killProcess(android.os.Process.myPid());
+//	    	finish();
 	    }  
 	} 
 
