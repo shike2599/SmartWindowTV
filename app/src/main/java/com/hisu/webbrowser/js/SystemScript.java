@@ -529,14 +529,14 @@ import java.util.List;
 		  Log.d(TAG, "boxType---- " + boxType);
 		  return boxType;
 	  }
-//	  //调用OTT跳转直播的方法
-//	  @JavascriptInterface
-//	  public void toOttLive(){
-//		  Log.d(TAG, "---toOttLive---- ");
-//		  Intent intent = new Intent();
-//		  intent.setComponent(new ComponentName("com.ipanel.join.live.suma.sx",
-//				  "com.ipanel.join.topway.homed.live.LiveForHomeActivity"));
-//		  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		  mContext.startActivity(intent);
-//	  }
+	  //调用OTT跳转直播的方法
+	  @JavascriptInterface
+	  public void toOttVod(){
+		  Log.d(TAG, "---toOttOVod--- ");
+		  Intent intent = new Intent();
+		  intent.setComponent(new ComponentName("com.ipanel.join.suma.vod",
+				  "com.ipanel.join.topway.homed.vod.VodHomeActivity"));
+		  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		  mContext.startActivity(intent);
+	  }
 }
