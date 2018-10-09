@@ -539,4 +539,16 @@ import java.util.List;
 		  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		  mContext.startActivity(intent);
 	  }
+
+
+	  //调用OTT跳转直播的方法
+	  @JavascriptInterface
+	  public void toLauncher(){
+		  Log.d(TAG, "---toLauncher--- ");
+		  Intent intent = new Intent();
+		  intent.setComponent(new ComponentName("com.ipanel.join.portal",
+				  "com.ipanel.join.homed.stb.portal.kuka.PortalActivity3"));
+		  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		  mContext.startActivity(intent);
+	  }
 }
