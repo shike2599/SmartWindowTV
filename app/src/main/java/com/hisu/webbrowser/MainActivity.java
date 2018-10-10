@@ -566,7 +566,11 @@
 	    	Log.e("home","HOME");
 	    	mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_HOMEPAGE);
 			webPlayer.stop(0);
-	    	android.os.Process.killProcess(android.os.Process.myPid());
+			Intent intent1 = new Intent(Intent.ACTION_MAIN);
+			intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent1.addCategory(Intent.CATEGORY_HOME);
+			MainActivity.this.startActivity(intent1);
+//	    	android.os.Process.killProcess(android.os.Process.myPid());
 //	    	finish();
 	    }  
 	} 
