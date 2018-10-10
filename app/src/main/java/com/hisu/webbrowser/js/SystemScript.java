@@ -371,6 +371,7 @@ import java.util.List;
 			}
 			try{
 				mContext.startActivity(intent);
+//				ac.finish();
 			}catch(ActivityNotFoundException ane){
 				Log.d(TAG,"SW_OPEN_APP ============ActivityNotFoundException========");
 				return -2;
@@ -538,6 +539,7 @@ import java.util.List;
 				  "com.ipanel.join.topway.homed.vod.VodHomeActivity"));
 		  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		  mContext.startActivity(intent);
+//		  ac.finish();
 	  }
 
 
@@ -550,5 +552,6 @@ import java.util.List;
 				  "com.ipanel.join.homed.stb.portal.kuka.PortalActivity3"));
 		  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		  mContext.startActivity(intent);
+//		  ac.finish();
 	  }
 }

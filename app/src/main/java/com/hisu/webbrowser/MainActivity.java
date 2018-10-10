@@ -49,6 +49,7 @@
 	import com.hisu.webbrowser.util.ToolsUtil;
 
 	import java.io.File;
+	import java.net.URL;
 	import java.util.ArrayList;
 	import java.util.List;
 	import java.util.Random;
@@ -402,6 +403,7 @@
 		Log.e(TAG, "onResume ========================" + url);
 		if (!TextUtils.isEmpty(url)) {
 			mBrowser.notifyEvent(BrowserEvent.BROWSER_RESUME);
+			mBrowser.loadUrl(url);
 		}
 		if (isSetting) {
 			timer = 0;
