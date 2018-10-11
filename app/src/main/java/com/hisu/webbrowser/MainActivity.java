@@ -403,7 +403,7 @@
 		Log.e(TAG, "onResume ========================" + url);
 		if (!TextUtils.isEmpty(url)) {
 			mBrowser.notifyEvent(BrowserEvent.BROWSER_RESUME);
-			mBrowser.loadUrl(url);
+//			mBrowser.loadUrl(url);
 		}
 		if (isSetting) {
 			timer = 0;
@@ -565,7 +565,7 @@
 	        //do what you want  
 	    	Log.e("home","HOME");
 	    	mBrowser.notifyEvent(BrowserEvent.KeyEvent.KEY_HOMEPAGE);
-			webPlayer.stop(0);
+//			webPlayer.stop(0);
 //			Intent intent1 = new Intent(Intent.ACTION_MAIN);
 //			intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //			intent1.addCategory(Intent.CATEGORY_HOME);
