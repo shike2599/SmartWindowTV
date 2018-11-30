@@ -4,13 +4,13 @@ android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
     defaultConfig {
-//        applicationId "com.hisu.webbrowser.smartwinnolaun"
-        applicationId "com.hisu.webbrowser.smartwin"
+        applicationId "com.hisu.webbrowser.smartwinnolaun"
+//        applicationId "com.hisu.webbrowser.smartwin"
 
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 15
-        versionName "v1.15"
+        versionCode 16
+        versionName "v1.16"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
