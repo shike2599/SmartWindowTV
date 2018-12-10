@@ -15,11 +15,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnBufferingUpdateListener;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnErrorListener;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.net.telecast.NetworkManager;
 import android.os.Handler;
 import android.os.IBinder;
@@ -31,14 +26,20 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-//import android.widget.RelativeLayout.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
-
 import android.widget.RelativeLayout;
+
 import com.hisu.webbrowser.R;
 import com.hisu.webbrowser.util.BrowserMessage;
 import com.hisu.webbrowser.util.CommonFunction;
 
+import org.videolan.libvlc.media.MediaPlayer;
+
+//import android.media.MediaPlayer.OnBufferingUpdateListener;
+//import android.media.MediaPlayer.OnCompletionListener;
+//import android.media.MediaPlayer.OnErrorListener;
+//import android.media.MediaPlayer.OnPreparedListener;
+//import android.widget.RelativeLayout.LayoutParams;
 
 public class WebPlayer {
 	static final String TAG = "WebPlayer";
@@ -52,7 +53,7 @@ public class WebPlayer {
 	private Handler mHandler;
 	private SurfaceView mSurfaceView;
 	private SurfaceHolder mSurfaceHolder;
-	private MediaPlayer mMediaPlayer;
+//	private MediaPlayer mMediaPlayer;
 	private int mWidth;
 	private int mHeight;
 	private int mState;
@@ -75,7 +76,7 @@ public class WebPlayer {
 	private int mY;
 	private int mW;
 	private int mH;
-
+	private MediaPlayer vlcMedPlayer;
 	public WebPlayer( SurfaceView surfaceView, int width,
 			int height) {
 		// TODO Auto-generated constructor stub
@@ -109,7 +110,7 @@ public class WebPlayer {
 		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
 		mState = inited;
-
+//		this.mVideoView = mVideoView;
 //		playDvb("dvb://1.1.76", 63, 143, 558, 305);
 	}
 
@@ -291,25 +292,53 @@ public class WebPlayer {
 	private void start() {
 		Log.d(TAG," "+ CommonFunction._FUNC_()+" called. mState = "+stateStr(mState));
 		//mSurfaceView.setZOrderOnTop(false);
-		if (mMediaPlayer != null) {
-			mMediaPlayer.reset();
-			mMediaPlayer.release();
-			mMediaPlayer = null;
+//		if (mMediaPlayer != null) {
+//			mMediaPlayer.reset();
+//			mMediaPlayer.release();
+//			mMediaPlayer = null;
+//		}
+//		if (mSurfaceCreated) {
+//			try {
+//
+//				mMediaPlayer = new MediaPlayer();
+//				mMediaPlayer.setOnPreparedListener(mPreparedListener);
+//				mMediaPlayer.setOnCompletionListener(mCompletionListener);
+//				mMediaPlayer.setOnErrorListener(mErrorListener);
+//				mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
+//				mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//				mSurfaceHolder.setFixedSize(mWidth, mHeight);
+//				mMediaPlayer.setDisplay(mSurfaceHolder);
+//				mMediaPlayer.setDataSource(mUrl);
+//				mMediaPlayer.prepareAsync();
+//
+//				mState = preparing;
+//			} catch (IllegalArgumentException e) {
+//				e.printStackTrace();
+//			} catch (IllegalStateException e) {
+//				e.printStackTrace();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+		if (vlcMedPlayer != null) {
+			vlcMedPlayer.reset();
+			vlcMedPlayer.release();
+			vlcMedPlayer = null;
 		}
 		if (mSurfaceCreated) {
 			try {
-	
-				mMediaPlayer = new MediaPlayer();
-				mMediaPlayer.setOnPreparedListener(mPreparedListener);
-				mMediaPlayer.setOnCompletionListener(mCompletionListener);
-				mMediaPlayer.setOnErrorListener(mErrorListener);
-				mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
-				mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+				vlcMedPlayer = new MediaPlayer();
+				vlcMedPlayer.setOnPreparedListener(mPreparedListener);
+				vlcMedPlayer.setOnCompletionListener(mCompletionListener);
+				vlcMedPlayer.setOnErrorListener(mErrorListener);
+				vlcMedPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
+				vlcMedPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				mSurfaceHolder.setFixedSize(mWidth, mHeight);
-				mMediaPlayer.setDisplay(mSurfaceHolder);
-				mMediaPlayer.setDataSource(mUrl);
-				mMediaPlayer.prepareAsync();
-				
+				vlcMedPlayer.setDisplay(mSurfaceHolder);
+				vlcMedPlayer.setDataSource(mUrl);
+				vlcMedPlayer.prepareAsync();
+
 				mState = preparing;
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
@@ -319,6 +348,7 @@ public class WebPlayer {
 				e.printStackTrace();
 			}
 		}
+
 	}
 
 	/**
@@ -326,11 +356,15 @@ public class WebPlayer {
 	 */
 	public void stop(int flag) {
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called. mState = "+stateStr(mState)+",flag="+flag);
-		if (mMediaPlayer != null) {
-			mMediaPlayer.reset();
-			mMediaPlayer.release();
-			mMediaPlayer = null;
-			
+//		if (mMediaPlayer != null) {
+//			mMediaPlayer.reset();
+//			mMediaPlayer.release();
+//			mMediaPlayer = null;
+//
+//		}
+		if (vlcMedPlayer != null) {
+			vlcMedPlayer.release();
+			vlcMedPlayer = null;
 		}
 		//mSurfaceView.setZOrderOnTop(false);
 		if(flag==0 && mSurfaceHolder!=null ){
@@ -388,26 +422,31 @@ public class WebPlayer {
 
 		}
 	};
-	private OnPreparedListener mPreparedListener = new OnPreparedListener() {
+	private MediaPlayer.OnPreparedListener mPreparedListener = new MediaPlayer.OnPreparedListener() {
 
 		@Override
 		public void onPrepared(MediaPlayer mp) {
 			if(mState==preparing){
-				mMediaPlayer.start();
+//				mMediaPlayer.start();
+				vlcMedPlayer.start();
 				mState =started;
 				mHandler.sendEmptyMessage(BrowserMessage.SW_CMD_PLAY_SUCCESS);
 			}
 		}
 	};
-	private OnErrorListener mErrorListener = new OnErrorListener() {
+	private MediaPlayer.OnErrorListener mErrorListener = new MediaPlayer.OnErrorListener() {
 
 		@Override
 		public boolean onError(MediaPlayer mp, int what, int extra) {
 			Log.d(TAG,"OnErrorListener onError called");
 			// TODO Auto-generated method stub
-			mMediaPlayer.reset();
-			mMediaPlayer.release();
-			mMediaPlayer = null;
+//			mMediaPlayer.reset();
+//			mMediaPlayer.release();
+//			mMediaPlayer = null;
+
+			vlcMedPlayer.reset();
+			vlcMedPlayer.release();
+			vlcMedPlayer = null;
 			if(mHandler!=null){
 				mHandler.sendEmptyMessage(BrowserMessage.SW_CMD_PLAY_ERROR);
 			}
@@ -415,13 +454,16 @@ public class WebPlayer {
 		}
 	};
 
-	private OnCompletionListener mCompletionListener = new OnCompletionListener() {
+	private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
 		@Override
 		public void onCompletion(MediaPlayer arg0) {
 			Log.d(TAG,"OnCompletionListener onCompletion called");
-			mMediaPlayer.reset();
-			mMediaPlayer.release();
-			mMediaPlayer = null;
+//			mMediaPlayer.reset();
+//			mMediaPlayer.release();
+//			mMediaPlayer = null;
+			vlcMedPlayer.reset();
+			vlcMedPlayer.release();
+			vlcMedPlayer = null;
 			if(mHandler!=null){
 				mHandler.sendEmptyMessage(BrowserMessage.SW_CMD_PLAY_END);
 			}
@@ -429,7 +471,7 @@ public class WebPlayer {
 		}
 	};
 
-	private OnBufferingUpdateListener mBufferingUpdateListener = new OnBufferingUpdateListener() {
+	private MediaPlayer.OnBufferingUpdateListener mBufferingUpdateListener = new MediaPlayer.OnBufferingUpdateListener() {
 		@Override
 		public void onBufferingUpdate(MediaPlayer mp, int percent) {
 			// TODO Auto-generated method stub
@@ -519,7 +561,8 @@ public class WebPlayer {
 		// TODO Auto-generated method stub
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called. mState = "+stateStr(mState));
 		if (mState == started  || mState == paused) {
-			return mMediaPlayer.getCurrentPosition()/1000;
+//			return mMediaPlayer.getCurrentPosition()/1000;
+			return vlcMedPlayer.getCurrentPosition()/1000;
 		} else {
 			return 0;
 		}
@@ -529,7 +572,8 @@ public class WebPlayer {
 		// TODO Auto-generated method stub
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called. mState = "+stateStr(mState));
 		if (mState == started  || mState == paused) {
-			return  mMediaPlayer.getDuration()/1000;
+//			return  mMediaPlayer.getDuration()/1000;
+			return  vlcMedPlayer.getDuration()/1000;
 		} else {
 			return 0;
 		}
@@ -540,7 +584,8 @@ public class WebPlayer {
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called. mState = "+stateStr(mState));
 		if(mState == started  || mState == paused){
 			mState = paused;
-			mMediaPlayer.pause();
+//			mMediaPlayer.pause();
+			vlcMedPlayer.pause();
 		}
 	}
 
@@ -549,7 +594,8 @@ public class WebPlayer {
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called. mState= "+stateStr(mState));
 		if(mState == paused  || mState == paused){
 			mState = started;
-			mMediaPlayer.start();
+//			mMediaPlayer.start();
+			vlcMedPlayer.start();
 		}
 	}
 
@@ -559,7 +605,8 @@ public class WebPlayer {
 		// TODO Auto-generated method stub
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called. mState = "+stateStr(mState) +" pos = "+pos);
 		if(mState == started || mState == paused){
-			mMediaPlayer.seekTo(pos);
+//			mMediaPlayer.seekTo(pos);
+			vlcMedPlayer.seekTo(pos);
 		}
 	}
 	

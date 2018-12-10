@@ -11,6 +11,12 @@
         android:id="@+id/surfaceView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
+
+	<!--<org.videolan.libvlc.media.VideoView-->
+		<!--android:id="@+id/vlc_videoview"-->
+		<!--android:layout_width="fill_parent"-->
+		<!--android:layout_height="fill_parent"-->
+		<!--/>-->
    
     <WebView
         android:id="@+id/htmlview"

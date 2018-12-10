@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.hisu.webbrowser.smartwinnolaun"
@@ -21,16 +21,16 @@ android {
         }
     }
 
-    sourceSets {
-        main {
-            // 1. 配置在根目录libs下可以加载第三方so库, (最好不要创建jniLibs, 在众多的开源库中可能会引起冲突,还没发现)
-            // 2. 运行时会自动将libs目录下的so库拷贝到指定目录
-            // 3. 如果自己创建的so不需要重新编译,可以将(app/build/intermediates/transforms)生成的so拷贝到这个目录
-            jniLibs.srcDir 'libs'
-            // 如果是单个文件夹 可以直接这样如下配置
-            // jniLibs.srcDir 'libs'
-        }
-    }
+//    sourceSets {
+//        main {
+//            // 1. 配置在根目录libs下可以加载第三方so库, (最好不要创建jniLibs, 在众多的开源库中可能会引起冲突,还没发现)
+//            // 2. 运行时会自动将libs目录下的so库拷贝到指定目录
+//            // 3. 如果自己创建的so不需要重新编译,可以将(app/build/intermediates/transforms)生成的so拷贝到这个目录
+//            jniLibs.srcDir 'libs'
+//            // 如果是单个文件夹 可以直接这样如下配置
+//            // jniLibs.srcDir 'libs'
+//        }
+//    }
 
     android {
         useLibrary 'org.apache.http.legacy'
@@ -42,10 +42,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/iPanelAndroidtv.jar')
     provided files('libs/framework.jar')
+    implementation project(':vlc')
 }
