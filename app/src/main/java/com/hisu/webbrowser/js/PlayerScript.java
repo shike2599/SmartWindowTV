@@ -52,16 +52,16 @@ public class PlayerScript {
 		if (TextUtils.isEmpty(url)){
 			return -1;
 		}
-//		Boolean isOtt = false;
-//		if(SystemScript.boxType!=null){
-//			char ch = SystemScript.boxType.charAt(2);
-//			if(ch == 'O'){
-//				isOtt = true;
-//			}
-//		}else{
-//			isOtt = false;
-//		}
-		if (url.startsWith("http")){
+		Boolean isOtt = false;
+		if(SystemScript.boxType!=null){
+			char ch = SystemScript.boxType.charAt(2);
+			if(ch == 'O'){
+				isOtt = true;
+			}
+		}else{
+			isOtt = false;
+		}
+		if (url.startsWith("http")||isOtt){
 			Log.d(TAG,"------------------播放视频时，URL不是普通视频格式，盒子又不是DVB-------------");
 			Message msg = new Message();
 			msg.what = BrowserMessage.SW_MEDIA_CMD_PLAY;
