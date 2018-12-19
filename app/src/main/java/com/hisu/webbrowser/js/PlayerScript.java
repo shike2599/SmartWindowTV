@@ -168,22 +168,22 @@ public class PlayerScript {
 		return 0;
 	}
 	@JavascriptInterface
-	public int getDuration(){
+	public long getDuration(){
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called.");
 		if (null == mHandler) {
 			return 0;
 		}
-		int duration = mSWPlayer.getDuration();
+		long duration = mSWPlayer.getDuration();
 		Log.d(TAG," duration == "+duration);
 		return duration;
 	}
 	@JavascriptInterface
-	public int getCurrentPosition(){
+	public long getCurrentPosition(){
 		Log.d(TAG," "+CommonFunction._FUNC_()+" called.");
 		if (null == mHandler) {
 			return 0;
 		}
-		int currentPos = mSWPlayer.getCurrentTimePos();
+		long currentPos = mSWPlayer.getCurrentTimePos();
 		Log.d(TAG," currentPos == "+currentPos);
 		return currentPos;
 	}
