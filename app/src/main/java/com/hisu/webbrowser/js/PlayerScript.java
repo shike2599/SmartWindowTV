@@ -61,13 +61,19 @@ public class PlayerScript {
 		}else{
 			isOtt = false;
 		}
-		if (url.startsWith("http")||isOtt){
+		if (url.startsWith("http")||isOtt||url.startsWith("udp")){
 			Log.d(TAG,"------------------播放视频时，URL不是普通视频格式，盒子又不是DVB-------------");
 			Message msg = new Message();
 			msg.what = BrowserMessage.SW_MEDIA_CMD_PLAY;
 			msg.getData().putString("URL", url);
 			mHandler.sendMessage(msg);
 		}else {
+			int isFlag = isZhuozhuang();
+			if(isFlag == 1){
+				url = "channelId://1";
+			}else if(isFlag == 0){
+				url = "dvb://1.1.76";
+			}
 			Message msg = new Message();
 			msg.what = BrowserMessage.SW_MEDIA_DVB_PLAY;
 			PlayBean playBean = new PlayBean(url, x, y, w, h);

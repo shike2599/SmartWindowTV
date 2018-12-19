@@ -33,7 +33,7 @@ import com.hisu.webbrowser.R;
 import com.hisu.webbrowser.util.BrowserMessage;
 import com.hisu.webbrowser.util.CommonFunction;
 
-import org.videolan.libvlc.media.MediaPlayer;
+//import org.videolan.libvlc.media.MediaPlayer;
 
 import java.io.IOException;
 
