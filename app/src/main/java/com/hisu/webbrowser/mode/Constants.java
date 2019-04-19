@@ -8,5 +8,5 @@ public class Constants {
 	public static final String APP_FLAG = "CommunistTV";
 	
 	public static final String APK_FILE_PATH_INFO = "hisu_apk_file_cache";
-	
+	public static boolean isHaveNet = false;
 }

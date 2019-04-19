@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import com.hisu.webbrowser.activity.HisuDialogActivity;
 import com.hisu.webbrowser.bean.PlayBean;
 import com.hisu.webbrowser.js.PlayerScript;
 import com.hisu.webbrowser.js.SystemScript;
+import com.hisu.webbrowser.mode.Constants;
 import com.hisu.webbrowser.mode.WebInterface;
 import com.hisu.webbrowser.player.WebPlayer;
 import com.hisu.webbrowser.util.BrowserEvent;
@@ -34,6 +36,8 @@ import com.hisu.webbrowser.util.BrowserMessage;
 import com.hisu.webbrowser.util.BrowserUtil;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class WebBrowser {
 
@@ -44,6 +48,32 @@ public class WebBrowser {
 	private SystemScript mSystemScript;
 	private ImageView mimage;
 	private Activity ac;
+
+	private Handler mHandlerTime;//超时之后的处理Handler
+	private class TimeOutHandler extends Handler{
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			if(msg.what == 1){
+				Toast.makeText(mContext,"服务器异常,请联系工作人员及时修复！",Toast.LENGTH_LONG).show();
+				Log.i(TAG,"--------60s后没有加载出页面！-----------------");
+				if(timer!=null){
+					timer.cancel();
+					timer.purge();
+				}
+				Constants.isHaveNet = false;
+				Toast.makeText(ac,"服务器异常，请联系管理员处理！",Toast.LENGTH_LONG).show();
+//				new SystemScript(null, ac.getApplication(), ac)
+//						.openApp(mContext.getResources().getString(R.string.system_dvb));
+				new SystemScript(ac).toOttVod();
+			}else{
+				Log.i(TAG,"--------60s后发送过来的数据What错误！-----------------");
+			}
+		}
+	}
+	private Timer timer;//计时器
+	private long timeout = 6000;//超时时间
+
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@SuppressLint("JavascriptInterface")
 	public WebBrowser(WebView webview, Context context, WebPlayer player,
@@ -164,6 +194,22 @@ public class WebBrowser {
 		});
 
 		mWebView.setWebViewClient(new WebViewClient() {
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				super.onPageStarted(view, url, favicon);
+				Log.i(TAG,"--------开始记录加载时间！-----------------");
+				timer =new Timer();
+				TimerTask tt =new TimerTask() {
+					@Override
+					public void run() {
+             /* * 超时后,首先判断页面加载是否小于100,就执行超时后的动作 */
+						Log.i(TAG,"--------时间到了，开始退出-----------------");
+						mHandlerTime.sendEmptyMessage(1);
+					}
+				};
+				timer.schedule(tt, timeout);
+			}
+
 			/*
 			 * (non-Javadoc)
 			 * 
@@ -176,6 +222,9 @@ public class WebBrowser {
 				// TODO Auto-generated method stub
 				super.onPageFinished(view, url);
 				mimage.setVisibility(View.GONE);
+				Log.i(TAG,"--------加载完成了！！去掉计时-----------------");
+				timer.cancel();
+				timer.purge();
 			}
 
 			/*

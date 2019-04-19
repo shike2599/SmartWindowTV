@@ -1,5 +1,6 @@
 	package com.hisu.webbrowser;
 
+	import android.annotation.TargetApi;
 	import android.app.Activity;
 	import android.app.AlertDialog;
 	import android.app.AlertDialog.Builder;
@@ -42,6 +43,7 @@
 	import com.hisu.webbrowser.js.SystemScript;
 	import com.hisu.webbrowser.manager.UpdateManager;
 	import com.hisu.webbrowser.manager.UpdateVideoManager;
+	import com.hisu.webbrowser.mode.Constants;
 	import com.hisu.webbrowser.mode.WebInterface;
 	import com.hisu.webbrowser.player.WebPlayer;
 	import com.hisu.webbrowser.util.BrowserEvent;
@@ -49,7 +51,6 @@
 	import com.hisu.webbrowser.util.ToolsUtil;
 
 	import java.io.File;
-	import java.net.URL;
 	import java.util.ArrayList;
 	import java.util.List;
 	import java.util.Random;
@@ -72,7 +73,7 @@
 	private boolean ShutDown = false;
 	WebView webView;
 	private WebPlayer webPlayer;
-
+	private NetCheckRunnable netCheckRunnable;
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -148,6 +149,7 @@
 	};
 
 	private int mLoadType = -1;
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -174,14 +176,14 @@
 		Log.d(TAG,"SystemScript.LOAD_TYPE === "+SystemScript.LOAD_TYPE);
 		/*判断是否有修改的启动IP
 		 * */
-		DataUtil data = new DataUtil(this);
+//		DataUtil data = new DataUtil(this);
 //		if(data.getsharepreferences(http) != null){
 //			WebInterface.URL_PREFIX = data.getsharepreferences(http);
 //			Toast.makeText(getApplication(), WebInterface.URL_PREFIX,Toast.LENGTH_LONG).show();
 //		}
 //		initbackground();
 		//		new SystemScript(mHandler, getApplication(), MainActivity.this).openVLC("http://192.168.1.168:80/hdmi_ext");
-		
+		netCheckRunnable = new NetCheckRunnable();
 		mUrl = WebInterface.DEFAULT_HOME_PAGE();
 
 		Intent intent = getIntent();
@@ -222,15 +224,25 @@
 		cleanExternalCache(mContext);
 //		Toast.makeText(mContext, "正在连接网络，请稍候...", Toast.LENGTH_LONG).show();
 
-		/*
-		 * 0 下载本地视频 1 不下载
-		 */
-		mHandler.sendEmptyMessageDelayed(handler, 2000);
-//		mHandler.sendEmptyMessageDelayed(handler, 500);
-//		mHandler.sendEmptyMessage(handler);
-		mBrowser.clearCache();
-		mBrowser.clearWebViewCache();
+//		/*
+//		 * 0 下载本地视频 1 不下载
+//		 */
+//		mHandler.sendEmptyMessageDelayed(handler, 2000);
+////		mHandler.sendEmptyMessageDelayed(handler, 500);
+////		mHandler.sendEmptyMessage(handler);
+//		mBrowser.clearCache();
+//		mBrowser.clearWebViewCache();
 		// mBrowser.loadUrl(mUrl);
+
+
+		if(ToolsUtil.isNetworkConnected(mContext)){
+			mHandler.sendEmptyMessageDelayed(handler, 2000);
+			Constants.isHaveNet = true;
+			mBrowser.clearCache();
+			mBrowser.clearWebViewCache();
+		}else{
+			mHandler.postDelayed(netCheckRunnable,8 * 1000);
+		}
 	}
 	
 	/*
@@ -683,4 +695,27 @@
 			mlist.clear();
 		}
 	}
+
+		/**
+		 * 检测网络状态
+		 */
+		public class NetCheckRunnable implements Runnable {
+			@Override
+			public void run() {
+				if(ToolsUtil.isNetworkConnected(mContext)){
+					mHandler.sendEmptyMessage(1);
+					Constants.isHaveNet = true;
+				}else{
+					//没有网则调到直播，并保存跳转的时间
+//					mHandler.sendEmptyMessage(0);
+					Constants.isHaveNet = false;
+					DataUtil dataUtil = new DataUtil(MainActivity.this);
+					long live_time = System.currentTimeMillis();
+					//保存时间
+					dataUtil.setsharepreferences("LIVE_TIME",String.valueOf(live_time));
+					Toast.makeText(MainActivity.this,"网络异常！！！",Toast.LENGTH_LONG).show();
+					new SystemScript(MainActivity.this).toOttVod();//调到点播
+				}
+			}
+		}
 }
