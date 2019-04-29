@@ -714,7 +714,7 @@
 					//保存时间
 					dataUtil.setsharepreferences("LIVE_TIME",String.valueOf(live_time));
 					Toast.makeText(MainActivity.this,"网络异常！！！",Toast.LENGTH_LONG).show();
-					new SystemScript(MainActivity.this).toOttVod();//调到点播
+					new SystemScript(MainActivity.this).toLauncher();//调到点播
 				}
 			}
 		}

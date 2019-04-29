@@ -65,7 +65,7 @@ public class WebBrowser {
 				Toast.makeText(ac,"服务器异常，请联系管理员处理！",Toast.LENGTH_LONG).show();
 //				new SystemScript(null, ac.getApplication(), ac)
 //						.openApp(mContext.getResources().getString(R.string.system_dvb));
-				new SystemScript(ac).toOttVod();
+				new SystemScript(ac).toLauncher();
 			}else{
 				Log.i(TAG,"--------60s后发送过来的数据What错误！-----------------");
 			}
